@@ -40,10 +40,19 @@
                  :irs-float})
 
 (defrecord roll [id target status])
+(defn make-roll
+  [id target status]
+  (->roll id target status))
 
 (defrecord deal [id type rleg pleg traded effective mature terminate])
+(defn make-deal
+  [id type rleg pleg traded effective mature terminate]
+  (->deal id type rleg pleg traded effective mature terminate))
 
 (defrecord leg [id type stance currency freq conv notional rate])
+(defn make-leg
+  [id type stance currency freq conv notional rate]
+  (->leg id type stance currency freq conv notional rate))
 
 (defrecord tran [id date leg event contracts amount annote roll])
 
