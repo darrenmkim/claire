@@ -1,4 +1,7 @@
-(ns claire.cash)
+(ns claire.cash
+  (:require claire.date :as d)
+  (:import java.util.Date)
+  (:import java.util.Calendar))
 
 
 ;; (defn tran-cash-payments [roll deal leg start]
@@ -15,3 +18,4 @@
 ;; (def roll-1 (->roll 5 (t/local-date 2020 6 3) :project))
 
 ;; (def xxx (t/month system-date))
+
