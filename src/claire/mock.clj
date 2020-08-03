@@ -13,27 +13,13 @@
                           (t/zoned-date-time 2025 1 3)
                           (t/zoned-date-time 2025 1 3)))
 
-(def mock-leg-a (make-leg 1
-                          "ABCIRSFIX"
-                          mock-deal
-                          :irs-fixed
-                          :payer
-                          :usd
-                          :semiannually
-                          :dc-30-360
-                          1000000.0
-                          2.0))
+(def mock-leg-a
+  (make-leg 1 "ABCIRSFIX" mock-deal :irs-fixed :payer :usd
+            :semiannually :dc-30-360 1000000.0 2.0))
 
-(def mock-leg-b (make-leg 2
-                          "ABCIRSFLT"
-                          mock-deal
-                          :irs-float
-                          :receiver
-                          :usd
-                          :semiannually
-                          :dc-30-360
-                          1000000.0
-                          nil))
+(def mock-leg-b
+  (make-leg 2 "ABCIRSFLT" mock-deal :irs-float :receiver :usd
+            :semiannually :dc-30-360 1000000.0 nil))
 
 (def mock-acc-cash (make-account 1 "Cash" 1111 "Cash clearing account"))
 (def mock-acc-receivable (make-account 2 "Receivable" 1121 "Derivative receivable"))

@@ -41,7 +41,7 @@
 (def leg-kinds #{:irs-fixed
                  :irs-float})
 
-(def signs {+ -})
+(def signs #{+ -})
 
 ;;; roll 
 (def orders #{:calc :post :revert})
