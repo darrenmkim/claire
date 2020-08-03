@@ -14,7 +14,8 @@
       (make-journal nil preset ((:sign preset) amount)))))
 
 (defn tran-cash [roll leg pick]
-  (let [kind (:kind leg)
+  (let [roll-id (:id roll)
+        pact (:pact leg)
         event (case (:stance leg)
                 :payer :pay :receiver :receive)
         contracts (case (:kind (:deal leg))
@@ -32,4 +33,5 @@
        (make-tran nil pick leg event contracts interest "abc" roll journal)
        (cash roll leg new-pick)))))
 
-(def mock-cash-testing (tran-cash mock-roll mock-leg-a system-date))
+;;(def mock-cash-testing (tran-cash mock-roll mock-leg-a system-date))
+
