@@ -41,6 +41,8 @@
 (def leg-kinds #{:irs-fixed
                  :irs-float})
 
+(def signs {+ -})
+
 ;;; roll 
 (def orders #{:calc :post :revert})
 (defrecord roll [id order start end])
@@ -67,12 +69,19 @@
 
 
 
-
-(defrecord chart [id name activity account doc])
+;;(defrecord chart [id name activity account doc])
 
 (defrecord account [id name number desc])
+(defn make-account [id name number desc]
+  (->account id name number desc))
 
-(defrecord journal [id tran account amount roll])
+(defrecord preset [id leg-kind event name account sign])
+(defn make-preset [id leg-kind event name account sign]
+  (->preset id leg-kind event name account sign))
+  
+(defrecord journal [id preset amount])
+(defn make-journal [id preset amount]
+  (->journal id preset amount))
 
 
 

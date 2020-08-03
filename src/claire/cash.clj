@@ -4,10 +4,28 @@
             [claire.domain :refer [freqs events make-roll
                                    deal-kinds leg-kinds
                                    make-leg make-deal make-tran
-                                   ]]))
+                                   make-journal
+                                   ]]
+            [claire.mock :refer :all]))
 
-(defn cash [roll leg pick]
-  (let [event (case (:stance leg)
+
+(defn journal-cash [kind event amount]
+  (let [presets
+         (filter
+          (fn [x] (and
+                   (= (:leg-kind x) kind)
+                   (= (:event x) event)))
+          mock-presets)]
+    (for [preset presets]
+      (make-journal nil
+                    preset
+                    ((:sign preset) amount)
+                    ))))
+
+
+(defn tran-cash [roll leg pick]
+  (let* [kind (:kind leg)
+         event (case (:stance leg)
                  :payer :pay
                  :receiver :receive)
          contracts (case (:kind (:deal leg))
@@ -20,7 +38,9 @@
     (if (t/after? pick mature)
       '()
       (cons
-       (make-tran nil pick leg event contracts interest "abc" roll nil)
+       (make-tran nil
+                  pick leg event contracts interest "abc" roll
+                  (journal-cash kind event interest))
        (cash roll leg (t/plus pick (t/months months)))))))
 
-(def mock-cash-testing (cash mock-roll mock-leg-a system-date))
+(def mock-cash-testing (tran-cash mock-roll mock-leg-a system-date))
