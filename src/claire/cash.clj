@@ -1,53 +1,26 @@
 (ns claire.cash
-  ;;(:exclude [range iterate format max min])
+  (:refer-clojure :exclude [range iterate format max min])
   (:require [java-time :as t]
-            [claire.domain :refer [make-roll
-                                   make-leg
-                                   make-deal]]))
+            [claire.domain :refer [freqs events make-roll
+                                   deal-kinds leg-kinds
+                                   make-leg make-deal make-tran
+                                   ]]))
 
-(defn tran-cash-payments [roll deal leg date]
-  (if (t/after? date (:mature deal))
-    '()
-    (cons date
-          (tran-cash-payments roll deal leg
-                              (t/plus date (t/months 6))))))
+(defn cash [roll leg pick]
+  (let [event (case (:stance leg)
+                 :payer :pay
+                 :receiver :receive)
+         contracts (case (:kind (:deal leg))
+                     :irs 1 :crs 1 nil)                    
+         mature (:mature (:deal leg))
+         months (:months ((:freq leg) freqs))
+         interest (* (:notional leg)
+                     (/ (:rate leg) 100.0)
+                     (:frac ((:freq leg) freqs)))]
+    (if (t/after? pick mature)
+      '()
+      (cons
+       (make-tran nil pick leg event contracts interest "abc" roll nil)
+       (cash roll leg (t/plus pick (t/months months)))))))
 
-(def mock-leg-a (make-leg 1
-                          "ABCIRSFIX"
-                          :irs-fixed
-                          :payer
-                          :usd
-                          :semiannually
-                          :dc-30-360
-                          1000000
-                          :libor))
-
-(def mock-leg-b (make-leg 2
-                          "ABCIRSFLT"
-                          :irs-float
-                          :receiver
-                          :usd
-                          :semiannually
-                          :dc-30-360
-                          1000000
-                          :libor))
-
-(def mock-deal (make-deal 123
-                          "ABCIRSMOCK"
-                          :irs
-                          (list mock-leg-a mock-leg-b )
-                          (t/zoned-date-time 2020 1 1)
-                          (t/zoned-date-time 2020 1 3)
-                          (t/zoned-date-time 2025 1 3)
-                          (t/zoned-date-time 2025 1 3)))
-
-;; roll 
-(def system-date (t/zoned-date-time 2020 5 1))
-(def target-date (t/zoned-date-time 2020 5 31))
-(def mock-roll (make-roll 1 :calc system-date target-date))
-
-
-
-(def testing (tran-cash-payments mock-roll mock-deal mock-leg-a system-date))
-(println testing)
-
+(def mock-cash-testing (cash mock-roll mock-leg-a system-date))
