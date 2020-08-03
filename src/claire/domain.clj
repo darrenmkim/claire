@@ -39,22 +39,27 @@
 (def leg-types #{:irs-fixed
                  :irs-float})
 
-(defrecord roll [id target status])
-(defn make-roll
-  [id target status]
-  (->roll id target status))
+;;; roll 
+(def orders #{:calc :post :revert})
+(defrecord roll [id order start end])
+(defn make-roll [id order start end]
+  (->roll id order start end))
 
-(defrecord deal [id type rleg pleg traded effective mature terminate])
-(defn make-deal
-  [id type rleg pleg traded effective mature terminate]
-  (->deal id type rleg pleg traded effective mature terminate))
+;; deal
+(defrecord leg [id name kind stance curr freq conv notio rate])
+(defn make-leg [id name kind stance curr freq conv notio rate]
+  (->leg id name kind stance curr freq conv notio rate))
+(defrecord deal [id name kind legs trade effect mature terminate])
+(defn make-deal [id name kind legs trade effect mature terminate]
+  (->deal id name kind legs trade effect mature terminate))
 
-(defrecord leg [id type stance currency freq conv notional rate])
-(defn make-leg
-  [id type stance currency freq conv notional rate]
-  (->leg id type stance currency freq conv notional rate))
+;; tran 
+(defrecord tran [id date leg event contracts amount annote roll journal])
+(defn make-tran [id date leg event contracts amount annote roll journal]
+  (->tran id date leg event contracts amount annote roll journal))
 
-(defrecord tran [id date leg event contracts amount annote roll])
+
+
 
 (defrecord chart [id name activity account doc])
 
