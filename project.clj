@@ -5,5 +5,12 @@
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :main claire.core
   :dependencies [[org.clojure/clojure "1.10.1"]
-                 [clojure.java-time "0.3.2"]]
+                 [clojure.java-time "0.3.2"]
+                 [string "0.1.0"]
+                 [ring "1.7.0"]
+                 [ring/ring-json "0.5.0"]
+                 [ring-cors "0.1.13"]
+                 [compojure "1.6.1"]
+                 [org.clojure/java.jdbc "0.7.8"]
+                 [org.xerial/sqlite-jdbc "3.23.1"]]
   :repl-options {:init-ns claire.core})

@@ -4,9 +4,6 @@
             [claire.domain :refer :all]
             [claire.mock :refer :all]))
 
-
-
-
 (defn journal-cash [pact event amount roll-id]
   (let [presets
         (filter
@@ -46,4 +43,4 @@
 
 ;; test 
 (def pick (date 2020 02 25))
-(def mock-cash-testing (tran-cash 1 1 pick))
+(def cash-test (tran-cash 1 1 pick))

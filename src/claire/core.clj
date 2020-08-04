@@ -1,11 +1,5 @@
 (ns claire.core
-  (:require [claire.domain]
-            [claire.cash]))
-
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+  (:require [claire.server :refer :all]))
 
 (defn -main []
-  (foo "a"))
+  (serve))
