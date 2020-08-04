@@ -1,4 +1,4 @@
-(ns claire.cash
+(ns claire.mock
   (:refer-clojure :exclude [range iterate format max min])
   (:require [java-time :as t]
             [claire.domain :refer :all]))
@@ -27,14 +27,14 @@
    (make-account 5 "Realized GL" 5111 "Cash Clearing Account")])
 
 (def mock-presets
-  [(make-preset 1 :irs-fixed :pay "irs fixed int pay cash" 1 -)
-   (make-preset 2 :irs-fixed :pay "irs fixed int pay income" 3 +)
-   (make-preset 3 :irs-fixed :receive "irs fixed int receive cash" 1 +)
-   (make-preset 4 :irs-fixed :receive "irs fixed int receive income" 2 -)
-   (make-preset 5 :irs-float :pay "irs fixed int pay cash" 1 -)
-   (make-preset 6 :irs-float :pay "irs fixed int pay income" 2 +)
-   (make-preset 7 :irs-float :receive "irs fixed int receive cash" 1 +)
-   (make-preset 8 :irs-float :receive "irs fixed int receive income" 2 -)])
+  [(make-preset 1 :irs-fixed :pay "irs fixed int pay cash" 1 :n)
+   (make-preset 2 :irs-fixed :pay "irs fixed int pay income" 3 :p)
+   (make-preset 3 :irs-fixed :receive "irs fixed int receive cash" 1 :p)
+   (make-preset 4 :irs-fixed :receive "irs fixed int receive income" 2 :n)
+   (make-preset 5 :irs-float :pay "irs fixed int pay cash" 1 :n)
+   (make-preset 6 :irs-float :pay "irs fixed int pay income" 2 :p)
+   (make-preset 7 :irs-float :receive "irs fixed int receive cash" 1 :p)
+   (make-preset 8 :irs-float :receive "irs fixed int receive income" 2 :n)])
 
 (def mock-rolls
   [(make-roll 1 :calc (date 2020 3 1) (date 2020 3 31))

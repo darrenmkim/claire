@@ -27,7 +27,7 @@
 
 (def pacts #{:irs-fixed :irs-float})
 
-(def signs #{+ -})
+(def signs #{:p :n})
 
 (defn date [year month day]
   (t/zoned-date-time year month day))
@@ -45,21 +45,24 @@
 (defn make-deal [id name breed trade effect mature terminate]
   (->deal id name breed trade effect mature terminate))
 
-(defrecord tran [id date leg-id event contracts amount annote roll-id journal-id])
-(defn make-tran [id date leg-id event contracts amount annote roll-id journal-id]
-  (->tran id date leg event contracts amount annote roll-id journal))
+(defrecord tran [id date leg-id event contracts amount annote roll-id])
+(defn make-tran [id date leg-id event contracts amount annote roll-id]
+  (->tran id date leg event contracts amount annote roll-id))
 
 (defrecord account [id name number desc])
 (defn make-account [id name number desc]
   (->account id name number desc))
 
-(defrecord preset [id leg-kind event name account sign])
-(defn make-preset [id leg-kind event name account sign]
-  (->preset id leg-kind event name account sign))
+(defrecord preset [id pact event name account-id sign])
+(defn make-preset [id pact event name account-id sign]
+  (->preset id pact event name account-id sign))
   
-(defrecord journal [id preset-id amount])
-(defn make-journal [id preset-id amount]
-  (->journal id preset amount))
+(defrecord journal [id tran-id account-id amount roll-id])
+(defn make-journal [id tran-id account-id amount roll-id]
+  (->journal id tran-id account-id amount roll-id))
 
-(defn find [data k id]
-  (filter #(= (k %) id) data))
+(defn find-first [data k id]
+  (first (filter #(= (k %) id) data)))
+
+(defn num-by-sign [num sign]
+  (case sign :p num :n (- 0 num)))
