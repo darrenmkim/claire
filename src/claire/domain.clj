@@ -4,9 +4,13 @@
             [java-time :as t]
             ))
 
-(def events #{:contract :effect :receive
-              :pay :accrue :valuate
-              :terminate :mature})
+(def events #{:contract :effect
+              :int-receive
+              :int-pay
+              :int-accrue
+              :valuate
+              :terminate
+              :mature})
 
 (def stances #{:payer :receiver :buyer :seller})
 
@@ -61,8 +65,13 @@
 (defn make-journal [id tran-id account-id amount roll-id]
   (->journal id tran-id account-id amount roll-id))
 
-(defn find-first [data k id]
+(defn find-single [data k id]
   (first (filter #(= (k %) id) data)))
 
 (defn num-by-sign [num sign]
   (case sign :p num :n (- 0 num)))
+
+(defn calc-interest [notional rate frac]
+  (* notional (/ rate 100.0) frac))
+
+

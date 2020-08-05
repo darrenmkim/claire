@@ -17,8 +17,6 @@
 (defn calc-interest-cash [notional rate frac]
   (* notional (/ rate 100.0) frac))
 
-
-
 (defn make-jour-cash-interest [roll leg date]
   (let [pact (:pact leg)
         event ((:stance leg) stance-to-event)
@@ -58,7 +56,7 @@
     (if (t/after? start mature)
       '()
       (cons tj
-            (make-cash-interest roll leg new-start)))))
+            (process-cash-interest roll leg new-start)))))
 
 ;; test 
 (def start (date 2020 02 25))
