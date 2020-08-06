@@ -4,23 +4,6 @@
             [claire.domain :refer :all]
             [claire.mock :refer :all]))
 
-(def stance-to-event
-  {:payer :int-pay
-   :receiver :int-receive})
-
-(defn find-presets [pact event]
-  (filter
-   (fn [x] (and (= (:pact x) pact)
-                (= (:event x) event)))
-   mock-presets))
-
-(defn find-rate [date code]
-  (:percent
-   (first (filter
-           (fn [x] (and (= (:date x) date)
-                        (= (:code x) code)))
-           mock-rates))))
-
 (defn calc-interest-cash [leg date]
   (let [pact (:pact leg)
         notional (:notional leg)
@@ -78,6 +61,4 @@
 (def roll (first mock-rolls))
 (def leg (first mock-legs))
 (def cash-test (process-cash-interest roll leg start))
-
-
-
+(def cash-count {:count "abc"})

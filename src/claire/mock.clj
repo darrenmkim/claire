@@ -42,7 +42,6 @@
    (make-roll 3 :calc (make-date 2020 3 1) (make-date 2020 3 31))
    (make-roll 4 :post (make-date 2020 3 1) (make-date 2020 3 31))])
 
-
 (def mock-rates
   [(make-rate 1 (make-date 2020 2 25) :libor 2.5)
    (make-rate 2 (make-date 2020 8 25) :libor 2.5)
@@ -60,3 +59,16 @@
    (make-rate 14 (make-date 2026 8 25) :libor 2.5)
    (make-rate 15 (make-date 2027 2 25) :libor 2.5)
    (make-rate 16 (make-date 2027 8 25) :libor 2.5)])
+
+(defn find-presets [pact event]
+  (filter
+   (fn [x] (and (= (:pact x) pact)
+                (= (:event x) event)))
+   mock-presets))
+
+(defn find-rate [date code]
+  (:percent
+   (first (filter
+           (fn [x] (and (= (:date x) date)
+                        (= (:code x) code)))
+           mock-rates))))

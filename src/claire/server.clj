@@ -15,12 +15,11 @@
    [claire.cash :refer :all]
    ))
 
-
 (def my-routes
   (routes
    (GET "/" [] (response "asdfdf"))
-   (GET "/mocklegs" [] (response mock-legs))
    (GET "/mockcash" [] (response cash-test))
+   (GET "/mockpreset" [] (response mock-presets))
    (GET "/test" [] (response {:baz "qsssux"}))
    (POST "/debug" request
          (response
@@ -33,9 +32,7 @@
              (wrap-cors :access-control-allow-origin [#".*"]
                         :access-control-allow-methods [:get])))
 
-(defonce +port+ 2317)
-
 (defn serve []
   (run-jetty (wrap-reload #'app)
-             {:port +port+
+             {:port 2317
               :join? false}))

@@ -14,6 +14,10 @@
 
 (def stances #{:payer :receiver :buyer :seller})
 
+(def stance-to-event
+  {:payer :int-pay
+   :receiver :int-receive})
+
 (def freqs {:continuously {:months nil :frac nil}
             :monthly {:months 1 :frac (/ 1.0 12.0)}
             :quarterly {:months 3 :frac (/ 3.0 12.0)}
