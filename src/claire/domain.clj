@@ -1,8 +1,7 @@
 (ns claire.domain
   (:refer-clojure :exclude [range iterate format max min])
   (:require [clojure.spec.alpha :as s]
-            [java-time :as t]
-            ))
+            [java-time :as t]))
 
 (def events #{:contract :effect
               :int-receive
@@ -27,7 +26,7 @@
 
 (def convetion #{:dc-ac-360 :dc-30-360})
 
-(def rates #{:libor :euribor})
+(def rate-codes #{:libor :euribor})
 
 (def currencies #{:usd :eur})
 
@@ -73,13 +72,8 @@
 (defn make-journal [id tran-id account-id amount roll-id]
   (->journal id tran-id account-id amount roll-id))
 
-(defn find-single [data k id]
-  (first (filter #(= (k %) id) data)))
-
 (defn num-by-sign [num sign]
   (case sign :p num :n (- 0 num)))
 
 (defn calc-interest [notional rate frac]
   (* notional (/ rate 100.0) frac))
-
-

@@ -11,15 +11,15 @@
    [ring.middleware.reload :refer [wrap-reload]]
    [ring.util.response :refer [response]]
    [clojure.java.jdbc :refer :all]
-   [claire.mock :refer :all]
-   [claire.cash :refer :all]
+   [claire.mock :as mock]
+   [claire.cash :as cash]
    ))
 
 (def my-routes
   (routes
    (GET "/" [] (response "asdfdf"))
-   (GET "/mockcash" [] (response cash-test))
-   (GET "/mockpreset" [] (response mock-presets))
+   (GET "/mockcash" [] (response cash/cash-test))
+   (GET "/mockpreset" [] (response mock/presets))
    (GET "/test" [] (response {:baz "qsssux"}))
    (POST "/debug" request
          (response
