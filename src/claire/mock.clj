@@ -60,6 +60,3 @@
    (make-rate 15 (make-date 2027 2 25) :libor 2.5)
    (make-rate 16 (make-date 2027 8 25) :libor 2.5)])
 
-
-
-

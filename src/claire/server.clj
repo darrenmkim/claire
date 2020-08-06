@@ -29,8 +29,9 @@
 (def app (-> my-routes
              wrap-json-body
              wrap-json-response
-             (wrap-cors :access-control-allow-origin [#".*"]
-                        :access-control-allow-methods [:get])))
+             (wrap-cors
+              :access-control-allow-origin [#".*"]
+              :access-control-allow-methods [:get])))
 
 (defn serve []
   (run-jetty (wrap-reload #'app)
