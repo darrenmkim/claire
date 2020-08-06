@@ -33,17 +33,21 @@
 
 (def signs #{:p :n})
 
-(defn date [year month day]
+(defn make-date [year month day]
   (t/zoned-date-time year month day))
+
+(defrecord rate [id date code percent])
+(defn make-rate [id date code percent]
+  (->rate id date code percent))
 
 (def orders #{:calc :post :revert})
 (defrecord roll [id order start end])
 (defn make-roll [id order start end]
   (->roll id order start end))
 
-(defrecord leg [id name deal-id pact stance curr freq conv notional rate])
-(defn make-leg [id name deal-id pact stance curr freq conv notional rate]
-  (->leg id name deal-id pact stance curr freq conv notional rate))
+(defrecord leg [id name deal-id pact stance curr freq conv notional rate-c fixed-r])
+(defn make-leg [id name deal-id pact stance curr freq conv notional rate-c fixed-r]
+  (->leg id name deal-id pact stance curr freq conv notional rate-c fixed-r))
 
 (defrecord deal [id name breed trade effect mature terminate])
 (defn make-deal [id name breed trade effect mature terminate]

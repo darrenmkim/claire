@@ -13,55 +13,68 @@
    (fn [x] (and (= (:pact x) pact)
                 (= (:event x) event)))
    mock-presets))
+
+(defn find-rate [date code]
+  (:percent
+   (first (filter
+           (fn [x] (and (= (:date x) date)
+                        (= (:code x) code)))
+           mock-rates))))
+
+(defn calc-interest-cash [leg date]
+  (let [pact (:pact leg)
+        notional (:notional leg)
+        months (:months ((:freq leg) freqs))
+        frac (:frac ((:freq leg) freqs))
+        rate (case pact
+                 :irs-fixed (:fixed-r leg)
+                 :irs-float (find-rate date (:rate-c leg)))
+        amount (* notional (/ rate 100.0) frac)
+        annote (str notional "*(" rate "/100)*" "(" months "/12)" "=" amount)]
+    {:amount amount :annote annote}))
   
-(defn calc-interest-cash [notional rate frac]
-  (* notional (/ rate 100.0) frac))
-
-
-
-(defn make-jour-cash-interest [roll leg date]
+(defn make-jour-cash-interest [roll leg tran-id tran-amount date]
   (let [pact (:pact leg)
         event ((:stance leg) stance-to-event)
         roll-id (:id roll)
-        amount 11
         presets (filter
                  (fn [x] (and (= (:pact x) pact)
                               (= (:event x) event)))
                  mock-presets)]
     (for [preset presets]
-      (make-journal nil
-                    nil
-                    (:account-id preset)
-                    (num-by-sign amount (:sign preset))
+      (make-journal nil tran-id (:account-id preset)
+                    (num-by-sign tran-amount (:sign preset))
                     roll-id))))
 
-
 (defn make-tran-cash-interest [roll leg date]
-  (let [notional (:notional leg)
-        rate (:rate leg)
+  (let [roll-id (:id roll)
+        leg-id (:id leg)
+        notional (:notional leg)
+        contracts (:contract leg)
         frac (:frac ((:freq leg) freqs))
         event ((:stance leg) stance-to-event)
         months (:months ((:freq leg) freqs))
-        amount (calc-interest-cash notional rate frac)         
-        annote (str notional "*(" rate "/100)*" "(" months "/12)" "=" amount)]
-    (make-tran nil date (:id leg) event (:contracts leg) amount annote (:id roll))))
-
-
+        calc (calc-interest-cash leg date)
+        amount (:amount calc)
+        annote (:annote calc)]
+    (make-tran nil date leg-id event contracts amount annote roll-id)))
 
 (defn process-cash-interest [roll leg start]
   (let [mature (:mature (find-single mock-deals :id (:deal-id leg)))
         months (:months ((:freq leg) freqs))
         new-start (t/plus start (t/months months))
         tran (make-tran-cash-interest roll leg start)
-        jour (make-jour-cash-interest roll leg start)
+        tran-id (:id tran)
+        tran-amount (:amount tran)
+        jour (make-jour-cash-interest roll leg tran-id tran-amount start)
         tj {:tran tran :jour jour}]
     (if (t/after? start mature)
       '()
       (cons tj
-            (make-cash-interest roll leg new-start)))))
+            (process-cash-interest roll leg new-start)))))
 
 ;; test 
-(def start (date 2020 02 25))
+(def start (make-date 2020 02 25))
 (def roll (first mock-rolls))
 (def leg (first mock-legs))
 (def cash-test (process-cash-interest roll leg start))
