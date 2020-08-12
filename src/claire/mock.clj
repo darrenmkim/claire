@@ -14,9 +14,9 @@
               (make-date 2020 1 3) (make-date 2025 1 3) (make-date 2025 1 3))])
    
 (def legs
-  [(make-leg 1 "ABCIRSFIX" 1 :irs-fixed :payer :usd
+  [(make-leg 1 "ABCIRSFIX" 1 :irs-fixed :payer :usd :usd
              :semiannually :dc-30-360 1000000.0 :libor 2.0)
-   (make-leg 2 "ABCIRSFLT" 1 :irs-float :receiver :usd
+   (make-leg 2 "ABCIRSFLT" 1 :irs-float :receiver :usd :usd
              :semiannually :dc-30-360 1000000.0 :libor nil)])
 
 (def accounts

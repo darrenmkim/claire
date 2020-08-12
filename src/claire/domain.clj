@@ -10,13 +10,18 @@
 
 ;;; DEAL ;;;
 
-(def breeds #{:irs :crs}) 
-(def pacts #{:irs-fixed :irs-float})
+(def breeds #{:irs :crs :fxf :cll
+              }) 
+(def pacts #{:irs-fixed :irs-float
+             :crs-mutual
+             :fxf-side
+             :cll-sell :cll-buy
+             })
 (def stances #{:payer :receiver :buyer :seller})
 
-(defrecord leg [id name deal-id pact stance curr freq conv notional rate-c fixed-r])
-(defn make-leg [id name deal-id pact stance curr freq conv notional rate-c fixed-r]
-  (->leg id name deal-id pact stance curr freq conv notional rate-c fixed-r))
+(defrecord leg [id name deal-id pact stance base-cur local-cur freq conv notional rate-c fixed-r])
+(defn make-leg [id name deal-id pact stance base-cur local-cur freq conv notional rate-c fixed-r]
+  (->leg id name deal-id pact stance base-cur local-cur freq conv notional rate-c fixed-r))
 
 (defrecord deal [id name breed trade effect mature terminate])
 (defn make-deal [id name breed trade effect mature terminate]
@@ -61,9 +66,9 @@
   {:payer :int-pay
    :receiver :int-receive})
 
-(defrecord tran [id date leg-id event contracts amount annote roll-id])
-(defn make-tran [id date leg-id event contracts amount annote roll-id]
-  (->tran id date leg event contracts amount annote roll-id))
+(defrecord tran [id date leg-id event contracts base-amt local-amt annote roll-id])
+(defn make-tran [id date leg-id event contracts base-amt local-amt annote roll-id]
+  (->tran id date leg event contracts base-amt local-amt annote roll-id))
   
 (defrecord journal [id tran-id account-id amount roll-id])
 (defn make-journal [id tran-id account-id amount roll-id]

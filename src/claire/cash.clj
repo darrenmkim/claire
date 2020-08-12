@@ -54,7 +54,7 @@
         calc (calc-interest-cash leg date)
         amount (:amount calc)
         annote (:annote calc)]
-    (dm/make-tran nil date leg-id event contracts amount annote roll-id)))
+    (dm/make-tran nil date leg-id event contracts amount amount annote roll-id)))
 
 (defn interim [roll leg start]
   (let [mature (find-mature leg)
@@ -62,13 +62,41 @@
         new-start (t/plus start (t/months months))
         tran (interim-tran roll leg start)
         tran-id (:id tran)
-        tran-amount (:amount tran)
+        tran-amount (:base-amt tran)
         jour (interim-jour roll leg tran-id tran-amount start)
         tj {:tran tran :jour jour}]
     (if (t/after? start mature)
       '()
       (cons tj
             (interim roll leg new-start)))))
+
+
+(defn initial-tran []
+  )
+
+(defn final []
+
+  )
+
+
+(defn initial [roll leg start]
+  (let [pact (:pact leg)]
+    (case pact
+      :irs-fixed '()
+      :irs-float '()
+      :fxf-side '()
+      :cll-buy (initial-tran )
+      :cll-sell (initial-tran ))))
+
+
+(defn route [roll leg start]
+  (let [pact (:pact leg)]
+    (case pact
+      :irs-fixed (interim roll leg start)
+      :irs-float (interim roll leg start)
+      :fxf-side (final)
+      :cll-sell (cons (initial roll leg start) (final))
+      :cll-buy (cons (initial roll leg start) (final)))))
 
 ;; test 
 (def start (dm/make-date 2020 02 25))
