@@ -1,5 +1,5 @@
 (ns claire.core
-  (:require [claire.server :refer :all]))
+  (:require [claire.server :as s]))
 
 (defn -main []
-  (serve))
+  (s/serve))

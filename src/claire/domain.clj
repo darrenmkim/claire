@@ -1,7 +1,8 @@
 (ns claire.domain
   (:refer-clojure :exclude [range iterate format max min])
-  (:require [clojure.spec.alpha :as s]
-            [java-time :as t]))
+  (:require
+   ;; [clojure.spec.alpha :as s]
+   [java-time :as t]))
 
 ;;; DATE ;;;
 
