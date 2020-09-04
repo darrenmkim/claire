@@ -2,19 +2,35 @@
   (:require
    [claire.db :as db]))
 
-(def rollcreatesql
-  (str "create table if not exists roll ("
-       "id integer primary key autoincrement, "
-       "ordertime text not null, "
-       "systemstart text not null, "
-       "systemend text not null, "
-       "personid integer not null );"))
+(defn ensure-roll-table []
+  (let [sql
+        (str "create table if not exists roll ("
+             "id integer primary key autoincrement, "
+             "ordertime text not null, "
+             "systemstart text not null, "
+             "systemend text not null, "
+             "personid integer not null );")]
+    (db/create-table! sql)))
 
-(db/createtable rollcreatesql)
+(defn make-roll
+  [{:keys [ordertime 
+           systemstart 
+           systemend 
+           personid]}]
+  {:ordertime ordertime
+   :systemstart systemstart
+   :systemend systemend
+   :personid personid})
 
-(db/insert! :roll {:ordertime "2020-09-03 14:22:12.123"
-                   :systemstart "2020-09-03 14:22:12.123"
-                   :systemend "2020-09-03 14:22:12.123"
-                   :personid 1})
+(defn write-roll [roll]
+  (db/insert! :roll roll))
 
-(db/query "select * from roll as r")
+(defn get-rolls []
+  (db/query "select * from roll as r"))
+
+;;; test
+(def sample-roll 
+  (make-roll {:ordertime "2020-09-03"
+              :systemstart "2020-09-03"
+              :systemend "2020-09-03"
+              :personid 5}))
