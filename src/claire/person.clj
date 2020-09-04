@@ -1,7 +1,7 @@
 (ns claire.person
   (:require [claire.db :as db]))
 
-(defn ensure-person-table []
+(defn ensure-table []
   (let [sql
         (str "create table if not exists person ("
              "id integer primary key autoincrement, "
@@ -11,24 +11,19 @@
              "phone text not null unique );")]
     (db/create-table! sql)))
 
-(defn make-person 
-  [{:keys [firstname 
-           lastname 
-           email 
-           phone]}]
-  {:firstname firstname
-   :lastname lastname
-   :email email
-   :phone phone})
-
-(defn write-person [person]
+(defn write [person]
   (db/insert! :person person))
 
-(defn get-persons []
-  (db/query "select * from person as p"))
+(defn get-all []
+  (db/query "select * from person"))
 
-(def sample-person 
-  (make-person {:firstname "Darren"
-                :lastname "Kim"
-                :email "darrenddwwerwekim@dsfl.com"
-                :phone "11232312-343"}))
+(defn set-db []
+  (ensure-table)
+  (println "<person> table is set up."))
+
+;;; test
+(def sample 
+  {:firstname "Dar"
+   :lastname "Ki"
+   :email "daaaaakim@dsfl.com"
+   :phone "3412-343"})

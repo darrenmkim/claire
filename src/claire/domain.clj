@@ -18,7 +18,7 @@
              :fxf-side
              :cll-sell :cll-buy
              })
-(def stances #{:payer :receiver :buyer :seller})
+
 
 (defrecord leg [id name deal-id pact stance base-cur local-cur freq conv notional rate-c fixed-r])
 (defn make-leg [id name deal-id pact stance base-cur local-cur freq conv notional rate-c fixed-r]
