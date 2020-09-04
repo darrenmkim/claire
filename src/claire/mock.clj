@@ -1,17 +1,18 @@
 (ns claire.mock
   (:refer-clojure :exclude [range iterate format max min])
-  (:require [java-time :as t]
-            [claire.domain :refer :all]))
+  (:require [claire.domain :refer :all]
+            [claire.format :as frm]
+            [claire.roll :as rll]))
 
 (def deals
-  [(make-deal 1 "DEALIRSMOCK" :irs (make-date 2020 1 1)
-              (make-date 2020 1 3) (make-date 2025 1 3) (make-date 2025 1 3))
-   (make-deal 2 "DEALIRSMOCK" :irs (make-date 2020 1 1)
-              (make-date 2020 1 3) (make-date 2025 1 3) (make-date 2025 1 3))
-   (make-deal 3 "DEALIRSMOCK" :irs (make-date 2020 1 1)
-              (make-date 2020 1 3) (make-date 2025 1 3) (make-date 2025 1 3))
-   (make-deal 4 "DEALIRSMOCK" :irs (make-date 2020 1 1)
-              (make-date 2020 1 3) (make-date 2025 1 3) (make-date 2025 1 3))])
+  [(make-deal 1 "DEALIRSMOCK" :irs (frm/make-date 2020 1 1)
+              (frm/make-date 2020 1 3) (frm/make-date 2025 1 3) (frm/make-date 2025 1 3))
+   (make-deal 2 "DEALIRSMOCK" :irs (frm/make-date 2020 1 1)
+              (frm/make-date 2020 1 3) (frm/make-date 2025 1 3) (frm/make-date 2025 1 3))
+   (make-deal 3 "DEALIRSMOCK" :irs (frm/make-date 2020 1 1)
+              (frm/make-date 2020 1 3) (frm/make-date 2025 1 3) (frm/make-date 2025 1 3))
+   (make-deal 4 "DEALIRSMOCK" :irs (frm/make-date 2020 1 1)
+              (frm/make-date 2020 1 3) (frm/make-date 2025 1 3) (frm/make-date 2025 1 3))])
    
 (def legs
   [(make-leg 1 "ABCIRSFIX" 1 :irs-fixed :payer :usd :usd
@@ -37,26 +38,26 @@
    (make-preset 8 :irs-float :receive "irs fixed int receive income" 2 :n)])
 
 (def rolls
-  [(make-roll 1 :calc (make-date 2020 3 1) (make-date 2020 3 31))
-   (make-roll 2 :revert (make-date 2020 3 1) (make-date 2020 3 31))
-   (make-roll 3 :calc (make-date 2020 3 1) (make-date 2020 3 31))
-   (make-roll 4 :post (make-date 2020 3 1) (make-date 2020 3 31))])
+  [(rll/make-roll 1 :calc (frm/make-date 2020 3 1) (frm/make-date 2020 3 31))
+   (rll/make-roll 2 :revert (frm/make-date 2020 3 1) (frm/make-date 2020 3 31))
+   (rll/make-roll 3 :calc (frm/make-date 2020 3 1) (frm/make-date 2020 3 31))
+   (rll/make-roll 4 :post (frm/make-date 2020 3 1) (frm/make-date 2020 3 31))])
 
 (def rates
-  [(make-rate 1 (make-date 2020 2 25) :libor 2.5)
-   (make-rate 2 (make-date 2020 8 25) :libor 2.5)
-   (make-rate 3 (make-date 2021 2 25) :libor 2.5)
-   (make-rate 4 (make-date 2021 8 25) :libor 2.5)
-   (make-rate 5 (make-date 2022 2 25) :libor 2.5)
-   (make-rate 6 (make-date 2022 8 25) :libor 2.5)
-   (make-rate 7 (make-date 2023 2 25) :libor 2.5)
-   (make-rate 8 (make-date 2023 8 25) :libor 2.5)
-   (make-rate 9 (make-date 2024 2 25) :libor 2.5)
-   (make-rate 10 (make-date 2024 8 25) :libor 2.5)
-   (make-rate 11 (make-date 2025 2 25) :libor 2.5)
-   (make-rate 12 (make-date 2025 8 25) :libor 2.5)
-   (make-rate 13 (make-date 2026 2 25) :libor 2.5)
-   (make-rate 14 (make-date 2026 8 25) :libor 2.5)
-   (make-rate 15 (make-date 2027 2 25) :libor 2.5)
-   (make-rate 16 (make-date 2027 8 25) :libor 2.5)])
+  [(make-rate 1 (frm/make-date 2020 2 25) :libor 2.5)
+   (make-rate 2 (frm/make-date 2020 8 25) :libor 2.5)
+   (make-rate 3 (frm/make-date 2021 2 25) :libor 2.5)
+   (make-rate 4 (frm/make-date 2021 8 25) :libor 2.5)
+   (make-rate 5 (frm/make-date 2022 2 25) :libor 2.5)
+   (make-rate 6 (frm/make-date 2022 8 25) :libor 2.5)
+   (make-rate 7 (frm/make-date 2023 2 25) :libor 2.5)
+   (make-rate 8 (frm/make-date 2023 8 25) :libor 2.5)
+   (make-rate 9 (frm/make-date 2024 2 25) :libor 2.5)
+   (make-rate 10 (frm/make-date 2024 8 25) :libor 2.5)
+   (make-rate 11 (frm/make-date 2025 2 25) :libor 2.5)
+   (make-rate 12 (frm/make-date 2025 8 25) :libor 2.5)
+   (make-rate 13 (frm/make-date 2026 2 25) :libor 2.5)
+   (make-rate 14 (frm/make-date 2026 8 25) :libor 2.5)
+   (make-rate 15 (frm/make-date 2027 2 25) :libor 2.5)
+   (make-rate 16 (frm/make-date 2027 8 25) :libor 2.5)])
 

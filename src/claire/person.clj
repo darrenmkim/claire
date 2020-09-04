@@ -30,5 +30,5 @@
 (def sample-person 
   (make-person {:firstname "Darren"
                 :lastname "Kim"
-                :email "darrenkim@dsfl.com"
-                :phone "112312-343"}))
+                :email "darrenddwwerwekim@dsfl.com"
+                :phone "11232312-343"}))
