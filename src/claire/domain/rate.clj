@@ -13,17 +13,15 @@
   (db/query "select * from rate"))
 
 (defn count-all []
-  (:count
-   (first
-    (db/query
-     "select count(*) as count from rate"))))
+  (db/query
+   "select count(*) as count from rate"))
 
 (defn ensure-preset []
   (let
    [preset [{:id 1 :code "FIXED" :memo "fixed and not use market rates"}
             {:id 2 :code "LIBOR3M" :memo "3-months libor"}
             {:id 3 :code "EURIBOR" :memo "euribor"}]]
-    (if (>= (count-all)
+    (if (>= (:count (first (count-all)))
             (count preset))
       ()
       (doseq [item preset]

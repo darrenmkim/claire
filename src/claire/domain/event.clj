@@ -13,10 +13,8 @@
   (db/query "select * from event"))
 
 (defn count-all []
-  (:count
-   (first
-    (db/query
-     "select count(*) as count from event"))))
+  (db/query
+   "select count(*) as count from event"))
 
 (defn ensure-preset []
   (let
@@ -28,7 +26,7 @@
             {:id 63 :code "VALUATE" :memo ".."}
             {:id 73 :code "TERMINATE" :memo ".."}
             {:id 83 :code "MATURE" :memo ".."}]]
-    (if (>= (count-all)
+    (if (>= (:count (first (count-all)))
             (count preset))
       ()
       (doseq [item preset]

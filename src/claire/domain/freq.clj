@@ -13,10 +13,8 @@
   (db/query "select * from freq"))
 
 (defn count-all []
-  (:count
-   (first
-    (db/query
-     "select count(*) as count from freq"))))
+  (db/query
+   "select count(*) as count from freq"))
 
 (defn ensure-preset []
   (let [preset [{:id 1 :code "continuously" :months 0}
@@ -26,7 +24,7 @@
                 {:id 5 :code "annually" :months 12}
                 {:id 6 :code "biannually" :months 24}
                 {:id 7 :code "none" :months 0}]]
-    (if (>= (count-all)
+    (if (>= (:count (first (count-all)))
             (count preset))
       ()
       (doseq [item preset]

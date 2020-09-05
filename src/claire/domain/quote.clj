@@ -23,8 +23,6 @@
   (ensure-table)
   (println "<quote> table is set up."))
 
-
-
 ;;; test
 (def sample
   {:date "03-04-2020"

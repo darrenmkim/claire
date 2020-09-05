@@ -14,10 +14,8 @@
   (db/query "select * from breed"))
 
 (defn count-all []
-  (:count
-   (first
-    (db/query
-     "select count(*) as count from breed"))))
+  (db/query
+   "select count(*) as count from breed"))
 
 (defn ensure-preset []
   (let 
@@ -36,7 +34,7 @@
             {:id 13 :code "RTR" :memo "Reverse Treasury Lock"}
             {:id 14 :code "SWT" :memo "Swaption"}
             {:id 15 :code "CMS" :memo "Commodity Swap"}]]
-    (if (>= (count-all)
+    (if (>= (:count (first (count-all)))
             (count preset))
       ()
       (doseq [item preset]

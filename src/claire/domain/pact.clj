@@ -22,7 +22,7 @@
   (let
    [preset [{:id 1 :code "IRSFIX" :memo "Fixed Leg of Interest Rate Swap"}
             {:id 2 :code "IRSFLT" :memo "Float Leg of Interest Rate Swap"}]]
-    (if (>= (count-all)
+    (if (>= (:count (first (count-all)))
             (count preset))
       ()
       (doseq [item preset]

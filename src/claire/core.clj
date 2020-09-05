@@ -1,5 +1,8 @@
 (ns claire.core
-  (:require [claire.server :as s]))
+  (:require 
+   [claire.center.serve :as serve]
+   [claire.center.prep :as prep]))
 
 (defn -main []
-  (s/serve))
+  (prep/set-domain-db)
+  (serve/run))

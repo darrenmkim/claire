@@ -13,16 +13,14 @@
   (db/query "select * from day"))
 
 (defn count-all []
-  (:count
-   (first
-    (db/query
-     "select count(*) as count from day"))))
+  (db/query
+   "select count(*) as count from day"))
 
 (defn ensure-preset []
   (let
    [preset [{:id 1 :code "30360" :memo ".."}
             {:id 2 :code "AC360" :memo ".."}]]
-    (if (>= (count-all)
+    (if (>= (:count (first (count-all)))
             (count preset))
       ()
       (doseq [item preset]
