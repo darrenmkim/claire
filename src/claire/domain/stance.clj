@@ -1,5 +1,5 @@
-(ns claire.stance
-  (:require [claire.db :as db]))
+(ns claire.domain.stance
+  (:require [claire.adapt.db :as db]))
 
 (defn ensure-table []
   (let 

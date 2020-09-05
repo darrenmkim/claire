@@ -1,6 +1,6 @@
 
-(ns claire.breed
-  (:require [claire.db :as db]))
+(ns claire.domain.breed
+  (:require [claire.adapt.db :as db]))
 
 (defn ensure-table []
   (let

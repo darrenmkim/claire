@@ -1,5 +1,5 @@
-(ns claire.person
-  (:require [claire.db :as db]))
+(ns claire.domain.person
+  (:require [claire.adapt.db :as db]))
 
 (defn ensure-table []
   (let [sql
@@ -8,7 +8,7 @@
              "firstname text not null, "
              "lastname text not null, "
              "email text not null unique, "
-             "phone text not null unique );")]
+             "phone text not null );")]
     (db/create-table! sql)))
 
 (defn write [person]

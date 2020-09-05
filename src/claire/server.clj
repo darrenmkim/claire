@@ -1,7 +1,5 @@
 (ns claire.server
   (:require
-   ;; [clojure.spec.alpha :as sp :refer :all]
-   ;;[java-time :as t]
    [ring.adapter.jetty :refer [run-jetty]]
    [clojure.pprint :refer [pprint]]
    [compojure.core :refer [routes GET POST]] ;; PUT DELETE can be added 
@@ -10,20 +8,21 @@
    [ring.middleware.cors :refer [wrap-cors]]
    [ring.middleware.reload :refer [wrap-reload]]
    [ring.util.response :refer [response]]
-   ;; [clojure.java.jdbc :as j]
-   [claire.mock :as mock]
-   [claire.cash :as cash]
+  ;; [claire.mock :as mock]
+  ;; [claire.cash :as cash]
+   [claire.domain.ability :as ability]
    ))
 
 (def my-routes
   (routes
    (GET "/" [] (response "asdfdf"))
-   (GET "/mockcash" [] (response cash/cash-test))
-   (GET "/mockpreset" [] (response mock/presets))
+   (GET "/get-abilities" [] (response (ability/get-all)))
+   (GET "/count-abilities" [] (response (ability/count-all)))
+   ;;(GET "/mockcash" [] (response cash/cash-test))
+   ;;(GET "/mockpreset" [] (response mock/presets))
    (GET "/test" [] (response {:baz "qsssux"}))
-   (POST "/debug" request
-         (response
-          (with-out-str (pprint request))))
+   (POST "/debug" request (response
+                           (with-out-str (pprint request))))
    (not-found {:error "Not found"})))
 
 (def app (-> my-routes

@@ -1,4 +1,4 @@
-(ns claire.db
+(ns claire.adapt.db
   (:require [clojure.java.jdbc :as jdbc]))
 
 (defn dbspec []

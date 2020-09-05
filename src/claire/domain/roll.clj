@@ -1,6 +1,6 @@
-(ns claire.roll
+(ns claire.domain.roll
   (:require
-   [claire.db :as db]))
+   [claire.adapt.db :as db]))
 
 (defn ensure-table []
   (let [sql

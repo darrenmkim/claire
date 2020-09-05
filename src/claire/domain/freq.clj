@@ -1,5 +1,5 @@
-(ns claire.freq
-  (:require [claire.db :as db]))
+(ns claire.domain.freq
+  (:require [claire.adapt.db :as db]))
 
 (defn ensure-table []
   (let
