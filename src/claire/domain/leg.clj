@@ -15,7 +15,7 @@
              "dayid integer not null, "
              "notional real not null, "
              "rateid integer not null, "
-             "fixedrate real );")]
+             "givenrate real );")]
     (db/create-table! sql)))
 
 (defn write [leg]
