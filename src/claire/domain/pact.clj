@@ -1,5 +1,7 @@
 (ns claire.domain.pact
-  (:require [claire.adapt.db :as db]))
+  (:require 
+   [clojure.string :refer [split]]
+   [claire.adapt.db :as db]))
 
 (defn ensure-table []
   (let
@@ -24,6 +26,13 @@
     (db/query
      "select count(*) as count from pact"))))
 
+(split "notional * givenrate * ( freqmonths / 12 )" #" ")
+
+(let [mystr "hello"]
+  (case mystr
+    "" 0
+    "hello" (count mystr)))
+
 (defn ensure-preset []
   (let
    [preset [{:id 1
@@ -31,7 +40,7 @@
              :code "IRSFIX"
              :name "IR Swap Fixed"
              :initialcash "none"
-             :interimcash "notional*givenrate*(freqmonths/12)"
+             :interimcash "notional * givenrate * ( freqmonths / 12 )"
              :finalcash "none"
              :memo "Fixed Leg of Interest Rate Swap"}
             {:id 2
@@ -39,7 +48,7 @@
              :code "IRSFLT"
              :name "IR Swap Float"
              :initialcash "none"
-             :interimcash "notional*quote*(freqmonths/12)"
+             :interimcash " notional * quote * ( freqmonths / 12 )"
              :finalcash "none"
              :memo "Float Leg of Interest Rate Swap"}
             {:id 3
@@ -48,7 +57,7 @@
              :name "FX Spot"
              :initialcash "none"
              :interimcash "none"
-             :finalcash "notional*givenrate*(terminatedate-effectdate)/360"
+             :finalcash " notional * givenrate * ( terminatedate - effectdate ) / 360"
              :memo "FX Spot"}
             {:id 4
              :breedid 3
@@ -56,7 +65,7 @@
              :name "FX Forward"
              :initialcash "none"
              :interimcash "none"
-             :finalcash "notional*givenrate*(terminatedate-effectdate)/360"
+             :finalcash "notional * givenrate * ( terminatedate - effectdate ) / 360"
              :memo "FX Forward"}]]
     (if (>= (:count (first (count-all)))
             (count preset))
