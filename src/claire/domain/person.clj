@@ -1,7 +1,7 @@
 (ns claire.domain.person
   (:require [claire.adapt.db :as db]))
 
-(defn ensure-table []
+(defn set-table! []
   (let [sql
         (str "create table if not exists person ("
              "id integer primary key autoincrement, "
@@ -17,8 +17,8 @@
 (defn get-all []
   (db/query "select * from person"))
 
-(defn set-db []
-  (ensure-table)
+(defn set-db! []
+  (set-table!)
   (println "<person> table is set up."))
 
 ;;; test

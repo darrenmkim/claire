@@ -1,7 +1,7 @@
 (ns claire.domain.day
   (:require [claire.adapt.db :as db]))
 
-(defn ensure-table []
+(defn set-table! []
   (let
    [sql (str "create table if not exists day ("
              "id integer primary key, "
@@ -16,7 +16,7 @@
   (db/query
    "select count(*) as count from day"))
 
-(defn ensure-preset []
+(defn set-preval! []
   (let
    [preset [{:id 1 :code "30360" :memo ".."}
             {:id 2 :code "AC360" :memo ".."}]]
@@ -26,7 +26,7 @@
       (doseq [item preset]
         (db/insert! :day item)))))
 
-(defn set-db []
-  (ensure-table)
-  (ensure-preset)
+(defn set-db! []
+  (set-table!)
+  (set-preval!)
   (println "<day> table is set up."))

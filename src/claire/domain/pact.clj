@@ -1,9 +1,10 @@
 (ns claire.domain.pact
-  (:require 
-   [clojure.string :refer [split]]
-   [claire.adapt.db :as db]))
+  (:require
+   [clojure.string :refer [split includes?]]
+   [claire.adapt.db :as db]
+   [infix.macros :refer [infix]]))
 
-(defn ensure-table []
+(defn set-table! []
   (let
    [sql (str "create table if not exists pact ("
              "id integer primary key, "
@@ -26,29 +27,25 @@
     (db/query
      "select count(*) as count from pact"))))
 
-(split "notional * givenrate * ( freqmonths / 12 )" #" ")
-
-(let [mystr "hello"]
-  (case mystr
-    "" 0
-    "hello" (count mystr)))
-
-(defn ensure-preset []
+(defn set-preval! []
   (let
    [preset [{:id 1
              :breedid 1
              :code "IRSFIX"
              :name "IR Swap Fixed"
-             :initialcash "none"
-             :interimcash "notional * givenrate * ( freqmonths / 12 )"
-             :finalcash "none"
+             :initialcash "()"
+             :interimcash
+             "(defn guesswhat 
+              [notional givenrate yearfrac] 
+              (* notional givenrate yearfrac))"
+             :finalcash "()"
              :memo "Fixed Leg of Interest Rate Swap"}
             {:id 2
              :breedid 1
              :code "IRSFLT"
              :name "IR Swap Float"
              :initialcash "none"
-             :interimcash " notional * quote * ( freqmonths / 12 )"
+             :interimcash "(* notional quote yearfrac)"
              :finalcash "none"
              :memo "Float Leg of Interest Rate Swap"}
             {:id 3
@@ -57,7 +54,7 @@
              :name "FX Spot"
              :initialcash "none"
              :interimcash "none"
-             :finalcash " notional * givenrate * ( terminatedate - effectdate ) / 360"
+             :finalcash "(* notional quote yearfrac)"
              :memo "FX Spot"}
             {:id 4
              :breedid 3
@@ -65,7 +62,7 @@
              :name "FX Forward"
              :initialcash "none"
              :interimcash "none"
-             :finalcash "notional * givenrate * ( terminatedate - effectdate ) / 360"
+             :finalcash "(* notional quote yearfrac)"
              :memo "FX Forward"}]]
     (if (>= (:count (first (count-all)))
             (count preset))
@@ -73,7 +70,7 @@
       (doseq [item preset]
         (db/insert! :pact item)))))
 
-(defn set-db []
-  (ensure-table)
-  (ensure-preset)
+(defn set-db! []
+  (set-table!)
+  (set-preval!)
   (println "<pact> table is set up."))

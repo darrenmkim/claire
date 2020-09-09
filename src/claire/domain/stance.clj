@@ -1,7 +1,7 @@
 (ns claire.domain.stance
   (:require [claire.adapt.db :as db]))
 
-(defn ensure-table []
+(defn set-table! []
   (let 
    [sql (str "create table if not exists stance ("
              "id integer primary key, "
@@ -15,7 +15,7 @@
   (db/query
    "select count(*) as count from stance"))
 
-(defn ensure-preset []
+(defn set-preval! []
   (let [preset [{:id 1 :name "payer"}
                 {:id 2 :name "receiver"}
                 {:id 3 :name "buyer"}
@@ -26,7 +26,7 @@
       (doseq [item preset] 
         (db/insert! :stance item)))))
 
-(defn set-db []
-  (ensure-table)
-  (ensure-preset)
+(defn set-db! []
+  (set-table!)
+  (set-preval!)
   (println "<stance> table is set up."))

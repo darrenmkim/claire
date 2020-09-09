@@ -2,7 +2,7 @@
 (ns claire.domain.quote
   (:require [claire.adapt.db :as db]))
 
-(defn ensure-table []
+(defn set-table! []
   (let [sql
         (str "create table if not exists quote ("
              "id integer primary key autoincrement, "
@@ -19,8 +19,8 @@
 (defn get-all []
   (db/query "select * from quote"))
 
-(defn set-db []
-  (ensure-table)
+(defn set-db! []
+  (set-table!)
   (println "<quote> table is set up."))
 
 ;;; test

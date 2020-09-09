@@ -2,7 +2,7 @@
   (:require
    [claire.adapt.db :as db]))
 
-(defn ensure-table []
+(defn set-table! []
   (let [sql
         (str "create table if not exists roll ("
              "id integer primary key autoincrement, "
@@ -18,8 +18,8 @@
 (defn get-all []
   (db/query "select * from roll"))
 
-(defn set-db []
-  (ensure-table)
+(defn set-db! []
+  (set-table!)
   (println "<roll> table is set up."))
 
 

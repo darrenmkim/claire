@@ -1,12 +1,14 @@
 (ns claire.domain.freq
   (:require [claire.adapt.db :as db]))
 
-(defn ensure-table []
+(defn set-table! []
   (let
    [sql (str "create table if not exists freq ("
              "id integer primary key, "
              "code text not null, "
-             "months integer not null);")]
+             "months integer not null, "
+             "yearfrac read not null  "
+             ");")]
     (db/create-table! sql)))
 
 (defn get-all []
@@ -16,23 +18,23 @@
   (db/query
    "select count(*) as count from freq"))
 
-(defn ensure-preset []
-  (let [preset [{:id 1 :code "continuously" :months 0}
-                {:id 2 :code "monthly" :months 1}
-                {:id 3 :code "quarterly" :months 3}
-                {:id 4 :code "semiannually" :months 6}
-                {:id 5 :code "annually" :months 12}
-                {:id 6 :code "biannually" :months 24}
-                {:id 7 :code "none" :months 0}]]
+(defn set-preval! []
+  (let [preset [{:id 1 :code "continuously" :months 0 :yearfrac 999.0}
+                {:id 2 :code "monthly" :months 1 :yearfrac 0.083333333 }
+                {:id 3 :code "quarterly" :months 3 :yearfrac 0.25}
+                {:id 4 :code "semiannually" :months 6 :yearfrac 0.5}
+                {:id 5 :code "annually" :months 12 :yearfrac 1.0} 
+                {:id 6 :code "biannually" :months 24 :yearfrac 2.0}
+                {:id 7 :code "none" :months 0 :yearfrac 999.0}]]
     (if (>= (:count (first (count-all)))
             (count preset))
       ()
       (doseq [item preset]
         (db/insert! :freq item)))))
 
-(defn set-db []
-  (ensure-table)
-  (ensure-preset)
+(defn set-db! []
+  (set-table!)
+  (set-preval!)
   (println "<freq> table is set up."))
 
 

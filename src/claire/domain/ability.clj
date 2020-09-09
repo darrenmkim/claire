@@ -1,7 +1,7 @@
 (ns claire.domain.ability
   (:require [claire.adapt.db :as db]))
 
-(defn ensure-table []
+(defn set-table! []
   (let
    [sql (str "create table if not exists ability ("
              "id integer primary key, "
@@ -37,7 +37,7 @@
       (doseq [item preset]
         (db/insert! :ability item)))))
 
-(defn set-db []
-  (ensure-table)
+(defn set-db! []
+  (set-table!)
   (ensure-preset)
   (println "<ability> table is set up."))

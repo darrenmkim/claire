@@ -1,7 +1,7 @@
 (ns claire.domain.deal
   (:require [claire.adapt.db :as db]))
 
-(defn ensure-table []
+(defn set-table! []
   (let [sql
         (str "create table if not exists deal ("
              "id integer primary key autoincrement, "
@@ -19,7 +19,7 @@
 (defn get-all []
   (db/query "select * from deal"))
 
-(defn set-db []
-  (ensure-table)
+(defn set-db! []
+  (set-table!)
   (println "<deal> table is set up."))
 

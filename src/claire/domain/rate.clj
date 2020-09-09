@@ -1,7 +1,7 @@
 (ns claire.domain.rate
   (:require [claire.adapt.db :as db]))
 
-(defn ensure-table []
+(defn set-table! []
   (let
    [sql (str "create table if not exists rate ("
              "id integer primary key, "
@@ -16,7 +16,7 @@
   (db/query
    "select count(*) as count from rate"))
 
-(defn ensure-preset []
+(defn set-preval! []
   (let
    [preset [{:id 1 :code "FIXED" :memo "fixed and not use market rates"}
             {:id 2 :code "LIBOR3M" :memo "3-months libor"}
@@ -27,7 +27,7 @@
       (doseq [item preset]
         (db/insert! :rate item)))))
 
-(defn set-db []
-  (ensure-table)
-  (ensure-preset)
+(defn set-db! []
+  (set-table!)
+  (set-preval!)
   (println "<rate> table is set up."))

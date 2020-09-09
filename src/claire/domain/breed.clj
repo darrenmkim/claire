@@ -2,7 +2,7 @@
 (ns claire.domain.breed
   (:require [claire.adapt.db :as db]))
 
-(defn ensure-table []
+(defn set-table! []
   (let
    [sql (str "create table if not exists breed ("
              "id integer primary key, "
@@ -17,7 +17,7 @@
   (db/query
    "select count(*) as count from breed"))
 
-(defn ensure-preset []
+(defn set-preval! []
   (let 
    [preset [{:id 1 :code "IRS" :memo "Interest Rate Swap"}
             {:id 2 :code "CRS" :memo "Currency Swap"}
@@ -40,9 +40,9 @@
       (doseq [item preset]
         (db/insert! :breed item)))))
 
-(defn set-db []
-  (ensure-table)
-  (ensure-preset)
+(defn set-db! []
+  (set-table!)
+  (set-preval!)
   (println "<breed> table is set up."))
 
 

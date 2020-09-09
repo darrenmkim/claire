@@ -1,7 +1,7 @@
 (ns claire.domain.account
   (:require [claire.adapt.db :as db]))
 
-(defn ensure-table []
+(defn set-table! []
   (let [sql
         (str "create table if not exists "  
              "account " "( "
@@ -21,8 +21,8 @@
 (defn get-all []
   (db/query "select * from account"))
 
-(defn set-db []
-  (ensure-table)
+(defn set-db! []
+  (set-table!)
   (println "<account> table is set up."))
 
 ;;; test

@@ -1,7 +1,7 @@
 (ns claire.domain.event
   (:require [claire.adapt.db :as db]))
 
-(defn ensure-table []
+(defn set-table! []
   (let
    [sql (str "create table if not exists event ("
              "id integer primary key, "
@@ -16,7 +16,7 @@
   (db/query
    "select count(*) as count from event"))
 
-(defn ensure-preset []
+(defn set-preval! []
   (let
    [preset [{:id 13 :code "TRADE" :memo ".."}
             {:id 23 :code "EFFECT" :memo ".."}
@@ -32,7 +32,7 @@
       (doseq [item preset]
         (db/insert! :event item)))))
 
-(defn set-db []
-  (ensure-table)
-  (ensure-preset)
+(defn set-db! []
+  (set-table!)
+  (set-preval!)
   (println "<event> table is set up."))
