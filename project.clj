@@ -11,7 +11,8 @@
                  [ring/ring-json "0.5.0"]
                  [ring-cors "0.1.13"]
                  [compojure "1.6.1"]
-                 [org.clojure/java.jdbc "0.7.8"]
+                 [org.clojure/java.jdbc "0.7.11"]
+                 [org.postgresql/postgresql "9.4.1212"]
                  [org.xerial/sqlite-jdbc "3.23.1"]
                  [rm-hull/infix "0.3.3"]]
   :repl-options {:init-ns claire.core})

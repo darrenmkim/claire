@@ -1,10 +1,41 @@
 (ns claire.adapt.db
-  (:require [clojure.java.jdbc :as jdbc]))
+  (:require [clojure.java.jdbc :as jdbc]
+            [clojure.string :as string]))
 
-(defn dbspec []
-  {:classname   "org.sqlite.JDBC"
-   :subprotocol "sqlite"
-   :subname     "tdb/tdb.db"})
+(comment
+  "Psql commands to initialize database:   
+   postgres=# create user defineadmin with password '1324';
+   postgres=# create database clairedb owner defineadmin;")
+
+
+(def dbspec {:dbtype "postgresql"
+             :dbname "clairedb"
+             :host "localhost"
+             :user "defineadmin"
+             :password "1324"})
+
+(def statesql
+  (jdbc/create-table-ddl
+   :testtable [[:id :serial "primary key"]
+               [:state "varchar(32)"]
+               [:abrv "varchar(2)"]]))
+
+
+(jdbc/create-table-ddl :fruit
+                       [[:name "varchar(32)" :primary :key]
+                        [:appearance "varchar(32)"]
+                        [:cost :int]
+                        [:grade :real]])
+
+(def fruit-table-ddl
+  (jdbc/create-table-ddl :fruit
+                         [[:name "varchar(32)"]
+                          [:appearance "varchar(32)"]
+                          [:cost :int]
+                          [:grade :real]]))
+
+
+(jdbc/execute! dbspec statesql)
 
 (defn create-table! 
   "Create a table according to given sql code.

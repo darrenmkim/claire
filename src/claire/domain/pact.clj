@@ -44,26 +44,13 @@
              :breedid 1
              :code "IRSFLT"
              :name "IR Swap Float"
-             :initialcash "none"
-             :interimcash "(* notional quote yearfrac)"
-             :finalcash "none"
-             :memo "Float Leg of Interest Rate Swap"}
-            {:id 3
-             :breedid 3
-             :code "FXSPT"
-             :name "FX Spot"
-             :initialcash "none"
-             :interimcash "none"
-             :finalcash "(* notional quote yearfrac)"
-             :memo "FX Spot"}
-            {:id 4
-             :breedid 3
-             :code "FXFWD"
-             :name "FX Forward"
-             :initialcash "none"
-             :interimcash "none"
-             :finalcash "(* notional quote yearfrac)"
-             :memo "FX Forward"}]]
+             :initialcash "()"
+             :interimcash
+             "(defn guesswhat 
+              [notional quotedrate yearfrac] 
+              (* notional quotedrate yearfrac))"
+             :finalcash "()"
+             :memo "Float Leg of Interest Rate Swap"}]]
     (if (>= (:count (first (count-all)))
             (count preset))
       ()
