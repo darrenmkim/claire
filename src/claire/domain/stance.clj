@@ -2,11 +2,11 @@
   (:require [claire.adapt.db :as db]))
 
 (defn set-table! []
-  (let 
-   [sql (str "create table if not exists stance ("
-             "id integer primary key, "
-             "name text not null);")]
-    (db/create-table! sql)))
+  (db/execute!
+   "create table if not exists 
+    stance (
+    id int primary key, 
+    code varchar(16) not null)"))
 
 (defn get-all []
   (db/query "select * from stance"))
@@ -16,10 +16,10 @@
    "select count(*) as count from stance"))
 
 (defn set-preval! []
-  (let [preset [{:id 1 :name "payer"}
-                {:id 2 :name "receiver"}
-                {:id 3 :name "buyer"}
-                {:id 4 :name "seller"}]]
+  (let [preset [{:id 1 :code "payer"}
+                {:id 2 :code "receiver"}
+                {:id 3 :code "buyer"}
+                {:id 4 :code "seller"}]]
     (if (>= (:count (first (count-all)))
             (count preset))
       ()

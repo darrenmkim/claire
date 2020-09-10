@@ -2,12 +2,12 @@
   (:require [claire.adapt.db :as db]))
 
 (defn set-table! []
-  (let
-   [sql (str "create table if not exists status ("
-             "id integer primary key, "
-             "code text not null, "
-             "memo text not null);")]
-    (db/create-table! sql)))
+  (db/execute!
+   "create table if not exists 
+    status (
+    id int primary key, 
+    code varchar(16) not null, 
+    memo varchar(50) not null)"))
 
 (defn get-all []
   (db/query

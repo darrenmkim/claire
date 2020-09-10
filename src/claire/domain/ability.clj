@@ -2,12 +2,12 @@
   (:require [claire.adapt.db :as db]))
 
 (defn set-table! []
-  (let
-   [sql (str "create table if not exists ability ("
-             "id integer primary key, "
-             "code text not null, "
-             "memo text not null);")]
-    (db/create-table! sql)))
+  (db/execute!
+   "create table if not exists 
+    ability (
+    id int primary key, 
+    code varchar(16) not null, 
+    memo varchar(50) not null)"))
 
 (defn get-all []
   (db/query
@@ -25,12 +25,12 @@
    (str "select count(*) as count "
         "from ability")))
 
-(defn ensure-preset []
+(defn set-preval! []
   (let
-   [preset [{:id 131 :code "ADMIN" :memo "Administrator"}
-            {:id 231 :code "APPROVER" :memo "Approver"}
-            {:id 331 :code "PREPARER" :memo "Preparer"}
-            {:id 431 :code "VIEWER" :memo "Viewer"}]]
+   [preset [{:id 1 :code "ADMIN" :memo "Administrator"}
+            {:id 2 :code "APPROVER" :memo "Approver"}
+            {:id 3 :code "PREPARER" :memo "Preparer"}
+            {:id 4 :code "VIEWER" :memo "Viewer"}]]
     (if (>= (:count (first (count-all)))
             (count preset))
       ()
@@ -39,5 +39,5 @@
 
 (defn set-db! []
   (set-table!)
-  (ensure-preset)
+  (set-preval!)
   (println "<ability> table is set up."))
