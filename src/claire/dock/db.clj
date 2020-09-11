@@ -1,4 +1,4 @@
-(ns claire.adapt.db
+(ns claire.dock.db
   (:require [clojure.java.jdbc :as jdbc]))
 
 (comment
@@ -36,3 +36,28 @@
    returns the result in hashmap."
   [sql]
   (jdbc/query (dbspec) [sql]))
+
+(defn get-records [table]
+  (query
+   (str "select * "
+        "from " (name table))))
+
+(defn get-record-by-id [table id]
+  (query
+   (str "select * "
+        "from " (name table) " "
+        "where id = " id)))
+
+(defn count-records [table format]
+  (let [raw
+        (query (str "select count(*) as count "
+                    "from " (name table)))]
+    (case format
+      :num (:count (first raw))
+      :data raw)))
+
+(defn insert-pre! [table data]
+  (when (= (count-records table :num)
+           0)
+    (doseq [item data]
+      (insert! table item))))

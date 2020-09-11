@@ -1,6 +1,6 @@
 
 (ns claire.domain.quote
-  (:require [claire.adapt.db :as db]))
+  (:require [claire.dock.db :as db]))
 
 (defn set-table! []
   (let [sql

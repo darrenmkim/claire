@@ -1,4 +1,4 @@
-(ns claire.center.prep
+(ns claire.tower.prep
   (:require
    [claire.domain.ability :as ability]
    [claire.domain.account :as account]
@@ -15,16 +15,16 @@
    [claire.domain.status :as status]))
 
 (defn set-domain-db []
-  (ability/set-db!)
-  (account/set-db!)
-  (breed/set-db!)
-  (day/set-db!)
-  (event/set-db!)
-  (freq/set-db!)
-  (pact/set-db!)
-  (person/set-db!)
-  (quote/set-db!)
-  (rate/set-db!)
-  (roll/set-db!)
-  (stance/set-db!)
-  (status/set-db!))
+  (ability/set!)
+  (account/set!)
+  (breed/set!)
+  (day/set!)
+  (event/set!)
+  (freq/set!)
+  (pact/set!)
+  (person/set!)
+  (quote/set!)
+  (rate/set!)
+  (roll/set!)
+  (stance/set!)
+  (status/set!))

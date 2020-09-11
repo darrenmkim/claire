@@ -1,24 +1,18 @@
 (ns claire.domain.person
-  (:require [claire.adapt.db :as db]))
+  (:require [claire.dock.db :as db]))
 
-(defn set-table! []
-  (let [sql
-        (str "create table if not exists person ("
-             "id integer primary key autoincrement, "
-             "firstname text not null, "
-             "lastname text not null, "
-             "email text not null unique, "
-             "phone text not null );")]
-    (db/create-table! sql)))
+(defn schema []
+  "create table if not exists 
+   person (
+   id serial primary key,
+   username text unique not null,
+   firstname text not null, 
+   lastname text not null,
+   email text unique not null,
+   phone text)")
 
-(defn write [person]
-  (db/insert! :person person))
-
-(defn get-all []
-  (db/query "select * from person"))
-
-(defn set-db! []
-  (set-table!)
+(defn set! []
+  (db/execute! (schema))
   (println "<person> table is set up."))
 
 ;;; test

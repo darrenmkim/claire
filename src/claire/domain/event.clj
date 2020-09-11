@@ -1,38 +1,24 @@
 (ns claire.domain.event
-  (:require [claire.adapt.db :as db]))
+  (:require [claire.dock.db :as db]))
 
-(defn set-table! []
-  (let
-   [sql (str "create table if not exists event ("
-             "id integer primary key, "
-             "code text not null, "
-             "memo text not null);")]
-    (db/create-table! sql)))
+(defn schema []
+  "create table if not exists 
+   event (
+   id int primary key, 
+   code text not null, 
+   memo text not null)")
 
-(defn get-all []
-  (db/query "select * from event"))
+(defn preval []
+  [{:id 1 :code "trade" :memo ".."}
+   {:id 2 :code "effect" :memo ".."}
+   {:id 3 :code "pay" :memo ".."}
+   {:id 4 :code "receive" :memo ".."}
+   {:id 5 :code "accrue" :memo ".."}
+   {:id 6 :code "valuate" :memo ".."}
+   {:id 7 :code "terminate" :memo ".."}
+   {:id 8 :code "mature" :memo ".."}])
 
-(defn count-all []
-  (db/query
-   "select count(*) as count from event"))
-
-(defn set-preval! []
-  (let
-   [preset [{:id 13 :code "TRADE" :memo ".."}
-            {:id 23 :code "EFFECT" :memo ".."}
-            {:id 33 :code "PAY" :memo ".."}
-            {:id 43 :code "RECEIVE" :memo ".."}
-            {:id 53 :code "ACCRUE" :memo ".."}
-            {:id 63 :code "VALUATE" :memo ".."}
-            {:id 73 :code "TERMINATE" :memo ".."}
-            {:id 83 :code "MATURE" :memo ".."}]]
-    (if (>= (:count (first (count-all)))
-            (count preset))
-      ()
-      (doseq [item preset]
-        (db/insert! :event item)))))
-
-(defn set-db! []
-  (set-table!)
-  (set-preval!)
+(defn set! []
+  (db/execute! (schema))
+  (db/insert-pre! :event (preval))
   (println "<event> table is set up."))

@@ -1,32 +1,20 @@
 (ns claire.domain.stance
-  (:require [claire.adapt.db :as db]))
+  (:require [claire.dock.db :as db]))
 
-(defn set-table! []
-  (db/execute!
-   "create table if not exists 
-    stance (
-    id int primary key, 
-    code varchar(16) not null)"))
+(defn schema []
+  "create table if not exists 
+   stance (
+   id int primary key, 
+   name text unique not null,     
+   memo text not null)")
 
-(defn get-all []
-  (db/query "select * from stance"))
+(defn preval []
+  [{:id 1 :name "payer" :memo ".."}
+   {:id 2 :name "receiver" :memo ".."} 
+   {:id 3 :name "buyer" :memo ".."}
+   {:id 4 :name "seller" :memo ".."}])
 
-(defn count-all []
-  (db/query
-   "select count(*) as count from stance"))
-
-(defn set-preval! []
-  (let [preset [{:id 1 :code "payer"}
-                {:id 2 :code "receiver"}
-                {:id 3 :code "buyer"}
-                {:id 4 :code "seller"}]]
-    (if (>= (:count (first (count-all)))
-            (count preset))
-      ()
-      (doseq [item preset] 
-        (db/insert! :stance item)))))
-
-(defn set-db! []
-  (set-table!)
-  (set-preval!)
+(defn set! []
+  (db/execute! (schema))
+  (db/insert-pre! :stance (preval))
   (println "<stance> table is set up."))

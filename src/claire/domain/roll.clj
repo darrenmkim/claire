@@ -1,6 +1,6 @@
 (ns claire.domain.roll
   (:require
-   [claire.adapt.db :as db]))
+   [claire.dock.db :as db]))
 
 (defn set-table! []
   (let [sql
