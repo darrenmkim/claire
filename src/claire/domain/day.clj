@@ -4,7 +4,7 @@
 (defn schema []
   "create table if not exists 
    day (
-   id int primary key, 
+   id serial primary key, 
    name text unique not null, 
    memo text not null)")
 
@@ -12,7 +12,7 @@
   [{:id 1 :name "30360" :memo ".."}
    {:id 2 :name "AC360" :memo ".."}]) 
 
-(defn set! []
+(defn set-db! []
   (db/execute! (schema))
   (db/insert-pre! :day (preval))
   (println "<day> table is set up."))

@@ -4,7 +4,7 @@
 (defn schema []
   "create table if not exists 
    event (
-   id int primary key, 
+   id serial primary key, 
    code text not null, 
    memo text not null)")
 
@@ -18,7 +18,7 @@
    {:id 7 :code "terminate" :memo ".."}
    {:id 8 :code "mature" :memo ".."}])
 
-(defn set! []
+(defn set-db! []
   (db/execute! (schema))
   (db/insert-pre! :event (preval))
   (println "<event> table is set up."))

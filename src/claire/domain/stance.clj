@@ -14,7 +14,7 @@
    {:id 3 :name "buyer" :memo ".."}
    {:id 4 :name "seller" :memo ".."}])
 
-(defn set! []
+(defn set-db! []
   (db/execute! (schema))
   (db/insert-pre! :stance (preval))
   (println "<stance> table is set up."))

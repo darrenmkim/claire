@@ -1,48 +1,31 @@
-
 (ns claire.domain.breed
   (:require [claire.dock.db :as db]))
 
-(defn set-table! []
-  (let
-   [sql (str "create table if not exists breed ("
-             "id integer primary key, "
-             "code text not null, "
-             "memo text not null);")]
-    (db/create-table! sql)))
+(defn schema []
+  "create table if not exists 
+   breed (
+   id serial primary key,
+   name text unique not null,
+   memo text not null)")
 
-(defn get-all []
-  (db/query "select * from breed"))
-
-(defn count-all []
-  (db/query
-   "select count(*) as count from breed"))
-
-(defn set-preval! []
-  (let 
-   [preset [{:id 1 :code "IRS" :memo "Interest Rate Swap"}
-            {:id 2 :code "CRS" :memo "Currency Swap"}
-            {:id 3 :code "FTR" :memo "Future"}
-            {:id 4 :code "CAL" :memo "Call Option"}
-            {:id 5 :code "PUT" :memo "Put Option"}
-            {:id 6 :code "CAP" :memo "Interest Rate Cap"}
-            {:id 7 :code "CDS" :memo "Credit Default Swap"}
-            {:id 8 :code "TRS" :memo "Total Return Swap"}
-            {:id 9 :code "CRD" :memo "Corr:idor Option"}
-            {:id 10 :code "SPT" :memo "Foreign Currency Spot"}
-            {:id 11 :code "INF" :memo "Inflation Swap"}
-            {:id 12 :code "TRL" :memo "Treasury Lock"}
-            {:id 13 :code "RTR" :memo "Reverse Treasury Lock"}
-            {:id 14 :code "SWT" :memo "Swaption"}
-            {:id 15 :code "CMS" :memo "Commodity Swap"}]]
-    (if (>= (:count (first (count-all)))
-            (count preset))
-      ()
-      (doseq [item preset]
-        (db/insert! :breed item)))))
+(defn preval []
+  [{:name "irs" :memo "Interest Rate Swap"}
+   {:name "crs" :memo "Currency Swap"}
+   {:name "ftr" :memo "Future"}
+   {:name "cal" :memo "Call Option"}
+   {:name "put" :memo "Put Option"}
+   {:name "cap" :memo "Interest Rate Cap"}
+   {:name "cds" :memo "Credit Default Swap"}
+   {:name "trs" :memo "Total Return Swap"}
+   {:name "crd" :memo "Corridor Option"}
+   {:name "spt" :memo "Foreign Currency Spot"}
+   {:name "inf" :memo "Inflation Swap"}
+   {:name "trl" :memo "Treasury Lock"}
+   {:name "rtr" :memo "Reverse Treasury Lock"}
+   {:name "swt" :memo "Swaption"}
+   {:name "cms" :memo "Commodity Swap"}])
 
 (defn set-db! []
-  (set-table!)
-  (set-preval!)
+  (db/execute! (schema))
+  (db/insert-pre! :breed (preval))
   (println "<breed> table is set up."))
-
-

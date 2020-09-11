@@ -11,7 +11,7 @@
    email text unique not null,
    phone text)")
 
-(defn set! []
+(defn set-db! []
   (db/execute! (schema))
   (println "<person> table is set up."))
 

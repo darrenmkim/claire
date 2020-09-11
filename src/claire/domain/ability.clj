@@ -4,7 +4,7 @@
 (defn schema []
   "create table if not exists 
     ability (
-    id int primary key, 
+    id serial primary key, 
     name text unique not null, 
     memo text not null)")
 
@@ -14,7 +14,7 @@
    {:id 3 :name "preparer" :memo ".."}
    {:id 4 :name "viewer" :memo ".."}])
 
-(defn set! []
+(defn set-db! []
   (db/execute! (schema))
   (db/insert-pre! :ability (preval))
   (println "<ability> table is set up."))

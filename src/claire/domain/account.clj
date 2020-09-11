@@ -15,12 +15,6 @@
              "references status (id) " ");")]
     (db/create-table! sql)))
 
-(defn write [account]
-  (db/insert! :account account))
-
-(defn get-all []
-  (db/query "select * from account"))
-
 (defn set-db! []
   (set-table!)
   (println "<account> table is set up."))
