@@ -1,4 +1,4 @@
-(ns claire.domain.leg
+(ns claire.domain.var.leg
   (:require [claire.dock.db :as db]))
 
 (defn set-table! []

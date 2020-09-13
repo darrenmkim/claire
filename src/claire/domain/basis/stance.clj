@@ -1,10 +1,10 @@
-(ns claire.domain.stance
+(ns claire.domain.basis.stance
   (:require [claire.dock.db :as db]))
 
 (defn schema []
   "create table if not exists 
    stance (
-   id int primary key, 
+   id smallserial primary key, 
    name text unique not null,     
    memo text not null)")
 

@@ -1,10 +1,10 @@
-(ns claire.domain.status
+(ns claire.domain.basis.status
   (:require [claire.dock.db :as db]))
 
 (defn schema []
   "create table if not exists 
    status (
-   id int primary key, 
+   id smallserial primary key, 
    name text unique not null, 
    memo text not null)")
 

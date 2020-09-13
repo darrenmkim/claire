@@ -1,10 +1,10 @@
-(ns claire.domain.day
+(ns claire.domain.basis.day
   (:require [claire.dock.db :as db]))
 
 (defn schema []
   "create table if not exists 
    day (
-   id serial primary key, 
+   id smallserial primary key, 
    name text unique not null, 
    memo text not null)")
 

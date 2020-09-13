@@ -1,10 +1,10 @@
-(ns claire.domain.event
+(ns claire.domain.basis.event
   (:require [claire.dock.db :as db]))
 
 (defn schema []
   "create table if not exists 
    event (
-   id serial primary key, 
+   id smallserial primary key, 
    code text not null, 
    memo text not null)")
 

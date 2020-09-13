@@ -1,4 +1,4 @@
-(ns claire.domain.breed
+(ns claire.domain.tag.breed
   (:require [claire.dock.db :as db]))
 
 (defn schema []

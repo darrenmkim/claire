@@ -1,4 +1,4 @@
-(ns claire.domain.matrix
+(ns claire.domain.var.matrix
   (:require [claire.dock.db :as db]))
 
 (defn set-table! []

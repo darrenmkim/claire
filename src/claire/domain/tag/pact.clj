@@ -1,4 +1,4 @@
-(ns claire.domain.pact
+(ns claire.domain.tag.pact
   (:require
    ;[clojure.string :refer [split includes?]]
    [claire.dock.db :as db]
@@ -9,8 +9,8 @@
   "create table if not exists 
    pact (
    id serial primary key,
-   breedid int not null,   
    name text unique not null, 
+   breedid int not null,   
    initialcash text not null, 
    interimcash text not null, 
    finalcash text not null, 
@@ -20,20 +20,14 @@
    references breed(id))")
 
 (defn preval []
-  [{:id 1 :breedid 1 :name "IRSFIX"
+  [{:id 1 :name "irsfix" :breedid 1
     :initialcash "()"
-    :interimcash
-    "(defn guesswhat
-     [notional givenrate yearfrac]
-     (* notional givenrate yearfrac))"
+    :interimcash "(* notional givenrate yearfrac)"
     :finalcash "()"
     :memo "Fixed Leg of Interest Rate Swap"}
-   {:id 2 :breedid 1 :name "IRSFLT"
+   {:id 2 :name "irsflt" :breedid 1
     :initialcash "()"
-    :interimcash
-    "(defn guesswhat 
-     [notional quotedrate yearfrac] 
-     (* notional quotedrate yearfrac))"
+    :interimcash "(* notional quotedrate yearfrac)"
     :finalcash "()"
     :memo "Float Leg of Interest Rate Swap"}])
 
@@ -41,3 +35,18 @@
   (db/execute! (schema))
   (db/insert-pre! :pact (preval))
   (println "<pact> table is set up."))
+
+
+
+;;;; testing
+
+(db/query
+ "select 
+  p.id as pactid, 
+  p.name as pactname, 
+  b.id as breedid, 
+  b.name as breedname
+  from pact as p 
+  left join breed as b 
+  on p.breedid = b.id")
+

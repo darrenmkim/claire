@@ -1,10 +1,10 @@
-(ns claire.domain.freq
+(ns claire.domain.basis.freq
   (:require [claire.dock.db :as db]))
 
 (defn schema []
   "create table if not exists 
    freq (
-   id int primary key, 
+   id smallserial primary key, 
    name text not null, 
    months int not null, 
    memo text not null)")

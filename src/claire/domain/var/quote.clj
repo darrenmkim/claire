@@ -1,5 +1,5 @@
 
-(ns claire.domain.quote
+(ns claire.domain.var.quote
   (:require [claire.dock.db :as db]))
 
 (defn set-table! []

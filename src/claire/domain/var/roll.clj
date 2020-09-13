@@ -1,4 +1,4 @@
-(ns claire.domain.roll
+(ns claire.domain.var.roll
   (:require
    [claire.dock.db :as db]))
 

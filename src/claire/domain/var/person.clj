@@ -1,4 +1,4 @@
-(ns claire.domain.person
+(ns claire.domain.var.person
   (:require [claire.dock.db :as db]))
 
 (defn schema []
