@@ -2,30 +2,27 @@
   (:require
    [claire.dock.db :as db]))
 
-(defn set-table! []
-  (let [sql
-        (str "create table if not exists roll ("
-             "id integer primary key autoincrement, "
-             "ordertime text not null, "
-             "systemstart text not null, "
-             "systemend text not null, "
-             "personid integer not null );")]
-    (db/create-table! sql)))
-
-(defn write [roll]
-  (db/insert! :roll roll))
-
-(defn get-all []
-  (db/query "select * from roll"))
+(defn schema []
+  "create table if not exists 
+   roll (
+   id serial primary key,
+   ordertime TIMESTAMPTZ not null,
+   systemstart date not null,
+   systemend date not null,    
+   personid integer not null, 
+   memo text not null, 
+   constraint fk_person
+   foreign key (personid)
+   references person(id)) 
+   ")
 
 (defn set-db! []
-  (set-table!)
+  (db/execute! (schema))
   (println "<roll> table is set up."))
 
-
 ;;; test
-(def sample 
-  {:ordertime "2020-09-03"
-   :systemstart "2020-09-03"
-   :systemend "2020-09-03"
-   :personid 5})
+;(def sample 
+;  {:ordertime "2020-09-03"
+;   :systemstart "2020-09-03"
+;   :systemend "2020-09-03"
+;   :personid 5})

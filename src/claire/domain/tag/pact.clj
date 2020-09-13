@@ -10,7 +10,7 @@
    pact (
    id serial primary key,
    name text unique not null, 
-   breedid int not null,   
+   breedid integer not null,   
    initialcash text not null, 
    interimcash text not null, 
    finalcash text not null, 
@@ -35,7 +35,6 @@
   (db/execute! (schema))
   (db/insert-pre! :pact (preval))
   (println "<pact> table is set up."))
-
 
 
 ;;;; testing
