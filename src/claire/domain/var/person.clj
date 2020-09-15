@@ -16,8 +16,22 @@
   (println "<person> table is set up."))
 
 ;;; test
-(def sample 
-  {:firstname "Dar"
-   :lastname "Ki"
-   :email "daaaaakim@dsfl.com"
-   :phone "3412-343"})
+(def mocks
+ [{:username "dakio" :firstname "Dar" :lastname "Ki"
+   :email "asdf@dsfl.com" :phone "123-312-8343"}
+  {:username "talomo" :firstname "Abe" :lastname "Ki"
+   :email "hgfd@dsfl.com" :phone "123-312-8343"}
+  {:username "kouka" :firstname "Lom" :lastname "Ki"
+   :email "bvcxdf@dsfl.com" :phone "123-312-8343"}
+  {:username "wassa" :firstname "Bop" :lastname "Ki"
+   :email "erttr@dsfl.com" :phone "123-312-8343"}
+  {:username "hulou" :firstname "Ram" :lastname "Ki"
+   :email "fgfgd@dsfl.com" :phone "123-312-8343"}
+  {:username "bravi" :firstname "Fin" :lastname "Ki"
+   :email "sdff@dsfl.com" :phone "123-312-8343"}
+  {:username "assu" :firstname "Kal" :lastname "Ki"
+   :email "sdfghrty@dsfl.com" :phone "123-312-8343"}
+  {:username "lopolo" :firstname "Von" :lastname "Ki"
+   :email "dfgertdf@dsfl.com" :phone "123-312-8343"}])
+
+(db/insert! :person mocks)

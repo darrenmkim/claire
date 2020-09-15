@@ -6,12 +6,13 @@
    status (
    id smallserial primary key, 
    name text unique not null, 
-   memo text not null)")
+   memo text not null)
+   ")
 
 (defn preval []
-  [{:id 1 :name "active" :memo ".."}
-   {:id 2 :name "inactive" :memo ".."}
-   {:id 3 :name "pending" :memo ".."}])
+  [{:id 1 :name "posted" :memo ".."}
+   {:id 2 :name "drafted" :memo ".."}
+   {:id 3 :name "deleted" :memo ".."}])
 
 (defn set-db! []
   (db/execute! (schema))

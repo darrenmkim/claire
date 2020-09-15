@@ -23,13 +23,14 @@
   (jdbc/execute! (dbspec)
                  sql))
 
-(defn insert! 
+(defn insert!
   "Inserts records by two arguments that are
    1) the table name in keyword and 
-   2) the data in map, 
+   2) the records in a list of maps, 
    respectively."
   [table records]
-  (jdbc/insert! (dbspec) table records))
+  (doseq [record records]
+    (jdbc/insert! (dbspec) table record)))
 
 (defn query 
   "Runs query by given sql code and 

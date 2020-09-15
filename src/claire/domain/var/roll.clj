@@ -1,28 +1,43 @@
 (ns claire.domain.var.roll
   (:require
-   [claire.dock.db :as db]))
+   [claire.dock.db :as db]
+   [java-time :as jt]
+   ))
 
 (defn schema []
   "create table if not exists 
    roll (
    id serial primary key,
-   ordertime TIMESTAMPTZ not null,
+   ordertime timestamptz not null,
    systemstart date not null,
-   systemend date not null,    
-   personid integer not null, 
-   memo text not null, 
-   constraint fk_person
-   foreign key (personid)
-   references person(id)) 
-   ")
+   systemend date not null,
+   personid integer 
+   references person (id) not null ,
+   statusid smallint 
+   references status (id) not null,
+   memo text not null)")
 
 (defn set-db! []
   (db/execute! (schema))
   (println "<roll> table is set up."))
 
-;;; test
-;(def sample 
-;  {:ordertime "2020-09-03"
-;   :systemstart "2020-09-03"
-;   :systemend "2020-09-03"
-;   :personid 5})
+; test
+(def mocks 
+  [{:ordertime (jt/instant)
+    :systemstart (jt/local-date 2015 10 1)
+    :systemend (jt/local-date 2015 10 1)
+    :personid 3
+    :statusid 2
+    :memo "mock"}])
+
+(db/insert! :roll mocks)
+
+
+
+
+(jt/instant)
+(type (jt/local-date 2015 10 1))
+(type (jt/offset-date-time 2015 10 3 10 10))\
+
+
+(jt/local-date 2015 10 1)
