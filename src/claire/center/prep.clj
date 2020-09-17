@@ -1,4 +1,4 @@
-(ns claire.tower.prep
+(ns claire.center.prep
   (:require
    [claire.domain.basis.ability :as ability]
    [claire.domain.basis.day :as day]

@@ -1,4 +1,4 @@
-(ns claire.tower.serve
+(ns claire.center.serve
   (:require
    [ring.adapter.jetty :refer [run-jetty]]
    [clojure.pprint :refer [pprint]]

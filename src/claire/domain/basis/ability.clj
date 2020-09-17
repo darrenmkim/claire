@@ -1,12 +1,12 @@
 (ns claire.domain.basis.ability
-  (:require [claire.dock.db :as db]))
+  (:require [claire.center.db :as db]))
 
 (defn schema []
   "create table if not exists
-    ability (
-    id smallserial primary key,
-    name text unique not null,
-    memo text not null)")
+   ability (
+   id smallserial primary key,
+   name text unique not null,
+   memo text not null)")
 
 (defn preval []
   [{:id 1 :name "admin" :memo ".."}

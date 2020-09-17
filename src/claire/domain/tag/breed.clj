@@ -1,29 +1,30 @@
 (ns claire.domain.tag.breed
-  (:require [claire.dock.db :as db]))
+  (:require [claire.center.db :as db]))
 
 (defn schema []
   "create table if not exists 
    breed (
    id serial primary key,
    name text unique not null,
-   memo text not null)")
+   memo text not null
+   )")
 
 (defn preval []
-  [{:name "irs" :memo "Interest Rate Swap"}
-   {:name "crs" :memo "Currency Swap"}
-   {:name "ftr" :memo "Future"}
-   {:name "cal" :memo "Call Option"}
-   {:name "put" :memo "Put Option"}
-   {:name "cap" :memo "Interest Rate Cap"}
-   {:name "cds" :memo "Credit Default Swap"}
-   {:name "trs" :memo "Total Return Swap"}
-   {:name "crd" :memo "Corridor Option"}
-   {:name "spt" :memo "Foreign Currency Spot"}
-   {:name "inf" :memo "Inflation Swap"}
-   {:name "trl" :memo "Treasury Lock"}
-   {:name "rtr" :memo "Reverse Treasury Lock"}
-   {:name "swt" :memo "Swaption"}
-   {:name "cms" :memo "Commodity Swap"}])
+  [{:name "irs" :memo "interest rate swap"}
+   {:name "crs" :memo "currency swap"}
+   {:name "ftr" :memo "future"}
+   {:name "cal" :memo "call option"}
+   {:name "put" :memo "put option"}
+   {:name "cap" :memo "interest rate cap"}
+   {:name "cds" :memo "credit default swap"}
+   {:name "trs" :memo "total return swap"}
+   {:name "crd" :memo "corridor option"}
+   {:name "spt" :memo "foreign currency spot"}
+   {:name "inf" :memo "inflation swap"}
+   {:name "trl" :memo "treasury lock"}
+   {:name "rtr" :memo "reverse treasury lock"}
+   {:name "swt" :memo "swaption"}
+   {:name "cms" :memo "commodity swap"}])
 
 (defn set-db! []
   (db/execute! (schema))

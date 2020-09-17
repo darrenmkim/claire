@@ -1,5 +1,5 @@
-(ns claire.domain.var.matrix
-  (:require [claire.dock.db :as db]))
+(ns claire.domain.tag.matrix
+  (:require [claire.center.db :as db]))
 
 (defn set-table! []
   (let [sql

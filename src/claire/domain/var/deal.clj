@@ -1,25 +1,17 @@
 (ns claire.domain.var.deal
-  (:require [claire.dock.db :as db]))
+  (:require [claire.center.db :as db]))
 
-(defn set-table! []
-  (let [sql
-        (str "create table if not exists deal ("
-             "id integer primary key autoincrement, "
-             "name text not null unique, "
-             "tradedate text not null, "
-             "effectdate text not null, "
-             "terminatedate text not null, "
-             "maturedate text not null "
-             ");")]
-    (db/create-table! sql)))
-
-(defn write [deal]
-  (db/insert! :deal deal))
-
-(defn get-all []
-  (db/query "select * from deal"))
+(defn schema []
+  "create table if not exists 
+   deal (
+   id serial primary key,
+   name text unique not null,
+   tradedate date not null, 
+   effectdate date not null, 
+   terminatedate date not null, 
+   maturedate date not null,
+   memo text not null)")
 
 (defn set-db! []
-  (set-table!)
+  (db/execute! (schema))
   (println "<deal> table is set up."))
-

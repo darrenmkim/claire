@@ -1,4 +1,4 @@
-(ns claire.dock.db
+(ns claire.center.db
   (:require [clojure.java.jdbc :as jdbc]))
 
 (comment
@@ -60,5 +60,4 @@
 (defn insert-pre! [table data]
   (when (= (count-records table :num)
            0)
-    (doseq [item data]
-      (insert! table item))))
+    (insert! table data)))

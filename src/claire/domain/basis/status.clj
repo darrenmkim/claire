@@ -1,5 +1,5 @@
 (ns claire.domain.basis.status
-  (:require [claire.dock.db :as db]))
+  (:require [claire.center.db :as db]))
 
 (defn schema []
   "create table if not exists 

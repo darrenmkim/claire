@@ -1,5 +1,5 @@
-(ns claire.domain.var.account
-  (:require [claire.dock.db :as db]))
+(ns claire.domain.tag.account
+  (:require [claire.center.db :as db]))
 
 (defn set-table! []
   (let [sql
