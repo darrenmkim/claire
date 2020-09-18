@@ -9,10 +9,10 @@
    memo text not null)")
 
 (defn preval []
-  [{:id 1 :name "payer" :memo ".."}
-   {:id 2 :name "receiver" :memo ".."} 
-   {:id 3 :name "buyer" :memo ".."}
-   {:id 4 :name "seller" :memo ".."}])
+  [{:id 1 :name "pay" :memo ".."}
+   {:id 2 :name "receive" :memo ".."} 
+   {:id 3 :name "buy" :memo ".."}
+   {:id 4 :name "sell" :memo ".."}])
 
 (defn set-db! []
   (db/execute! (schema))

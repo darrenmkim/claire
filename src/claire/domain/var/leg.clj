@@ -21,3 +21,42 @@
 (defn set-db! []
   (db/execute! (schema))
   (println "<leg> table is set up."))
+
+;;;;;;;;;;;;;; MOCKING
+
+(defn set-mock! []
+  (let
+   [data
+    [{:name "abcirs01fix"
+      :dealid 1
+      :pactid 1
+      :stanceid 1
+      :basecur "USD"
+      :localcur "USD"
+      :freqid 3
+      :dayid 1
+      :notional 1000000
+      :rateid 6
+      :givenrate 0.4
+      :memo "mock leg 01"}
+     {:name "abcirs01float"
+      :dealid 1
+      :pactid 2
+      :stanceid 2
+      :basecur "USD"
+      :localcur "USD"
+      :freqid 3
+      :dayid 1
+      :notional 1000000
+      :rateid 6
+      :givenrate 0.0
+      :memo "mock leg 02"}]]
+    (db/insert! :leg data)))
+
+(defn q []
+  (db/query 
+   "select * from leg"))
+
+
+(comment
+  " ")
