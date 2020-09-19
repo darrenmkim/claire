@@ -32,27 +32,18 @@
   (doseq [record records]
     (jdbc/insert! (dbspec) table record)))
 
-(defn query 
-  "Runs query by given sql code and 
-   returns the result in hashmap."
+(defn get-records-by-query
   [sql]
-  (jdbc/query (dbspec) [sql]))
+  (jdbc/query (dbspec) sql))
 
-(defn get-records [table]
-  (query
-   (str "select * "
-        "from " (name table))))
-
-(defn get-record-by-id [table id]
-  (query
-   (str "select * "
-        "from " (name table) " "
-        "where id = " id)))
+(defn get-value-by-query
+  [sql]
+  (first (vals (first (jdbc/query (dbspec) sql)))))
 
 (defn count-records [table format]
   (let [raw
-        (query (str "select count(*) as count "
-                    "from " (name table)))]
+        (get-records-by-query
+         ["select count(*) as count from " (name table)])]
     (case format
       :num (:count (first raw))
       :data raw)))

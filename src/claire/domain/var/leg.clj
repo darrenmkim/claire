@@ -13,7 +13,7 @@
    localcur text not null, 
    freqid integer references freq (id) not null,      
    dayid integer references day (id) not null,           
-   notional money not null, 
+   notional real not null, 
    rateid integer references rate (id) not null,
    givenrate real not null, 
    memo text not null)")
@@ -30,12 +30,12 @@
     [{:name "abcirs01fix"
       :dealid 1
       :pactid 1
-      :stanceid 1
+      :stanceid 1     
       :basecur "USD"
       :localcur "USD"
       :freqid 3
       :dayid 1
-      :notional 1000000
+      :notional 1000000.00
       :rateid 6
       :givenrate 0.4
       :memo "mock leg 01"}
@@ -47,7 +47,7 @@
       :localcur "USD"
       :freqid 3
       :dayid 1
-      :notional 1000000
+      :notional 1000000.00
       :rateid 6
       :givenrate 0.0
       :memo "mock leg 02"}]]
