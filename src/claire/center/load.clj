@@ -1,4 +1,4 @@
-(ns claire.center.prep
+(ns claire.center.load
   (:require
    [claire.domain.basis.ability :as ability]
    [claire.domain.basis.day :as day]
@@ -13,6 +13,7 @@
    ))
 
 (defn set-domain-db! []
+  ;; basis
   (ability/set-db!)
   (day/set-db!)
   (event/set-db!)
@@ -20,7 +21,8 @@
   (rate/set-db!)
   (stance/set-db!)
   (status/set-db!)
-  ;(breed/set-db!)
-  ;(pact/set-db!)
-  ;(rate/set-db!)
+  ;; tag
+  ;;(breed/set-db!)
+  ;;(pact/set-db!)
+  ;;(rate/set-db!)
   )

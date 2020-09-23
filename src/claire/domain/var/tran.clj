@@ -2,8 +2,8 @@
   (:require
    [claire.center.db :as db]
    [claire.help.time :as tm]
+   [infix.macros :refer [infix]]
    ))
-
 
 (defn schema []
   "create table if not exists 
@@ -12,10 +12,10 @@
    date date not null, 
    legid integer references leg (id) not null,
    eventid integer references event (id) not null,
-   accrstart date not null, 
-   accrend date not null,   
-   rateid integer references rate (id) not null,
-   quote real not null,
+   accrstart date, 
+   accrend date,   
+   tickerid text references ticker(id),
+   quote real,
    basecur text not null, 
    baseamt real not null,
    localcur text not null, 
@@ -26,30 +26,80 @@
   (db/execute! (schema))
   (println "<tran> table is set up."))
 
-(defn make-tran [legid accrstart accrend cashdate]
-  (let [rateid
-        (db/get-value-by-query
-         ["select l.rateid from leg as l where l.id = ?" legid])
-        givenrate
-        (db/get-value-by-query
-         ["select l.givenrate from leg as l where l.id = ?" legid])
-        amount
-        (* givenrate (/ (tm/until accrend accrstart) 360))]
-    {:date cashdate
-     :legid legid
-     :eventid 1
-     :accrstart accrstart
-     :accrend accrend
-     :rateid rateid
-     :rateval givenrate
-     :basecur 1
-     :baseamt amount
-     :localcur 1
-     :localamt amount
-     :memo 1}))
+(defn make-leginfo [legid]
+  {:pactid "crsfix"
+   :stanceid "pay"
+   :periods 5
+   :spanid "annual"
+   :currencyid "usd"
+   :notional 1400000.00
+   :tickerid "fixed"
+   :givenrate 0.045
+   :upfrontcost ""
+   :interestpayment "(* notional givenrate (/ months 12))"
+   :principalpayment "notional"})
 
-(def legid 1)
-(def accrstart (tm/make-date 2020 1 3))
-(def accrend (tm/make-date 2020 6 3))
-(def cashdate (tm/make-date 2020 6 3))
-(make-tran legid accrstart accrend cashdate)
+
+
+(defn make-upfrontcost [leginfo]
+  (cond
+    (= (:upfrontcost leginfo) "") nil
+    ))
+
+(defn make-interestpayments [leginfo]
+  (let [interestpayment (:interestpayment leginfo)
+        notional (:notional leginfo)
+        givenrate (:givenrate leginfo)
+        months (:months leginfo)]
+       (if (= interestpayment "") nil
+           {:date (:tradedate leginfo)
+            :legid legid
+            :eventid (:eventid leginfo)
+           :accrstart  
+   accrend date not null,   
+   rateid integer references rate (id) not null,
+   quote real not null,
+   basecur text not null, 
+   baseamt real not null,
+   localcur text not null, 
+   localamt real not null,
+   memo 
+
+
+            }
+
+
+         )))
+
+(defn make-principalpayment [leginfo]
+  (let [notional (:notional legino)]
+    (if (= (:principalpayment leginfo) nil) nil
+        {:id serial primary key,
+         :date (:terminatedate leginfo)
+         :legid legid 
+         :eventid "terminate"
+         :accrstart nil  
+         :accrend nil   
+         :tickerid nil
+         :quote nil
+         :basecur  
+         :baseamt 
+         :localcur 
+         :localamt
+         :memo
+         })))
+
+
+(defn pos-neg-or-zero
+  "Determines whether or not n is positive, negative, or zero"
+  [n]
+  (cond
+    (< n 0) "negative"
+    (> n 0) "positive"
+    :else "zero"))
+
+(defn make-trans [legid]
+  (let [leginfo (make-leginfo legid)]
+    (make-upfrontcost leginfo)
+    (make-interestpayments leginfo)
+    (make-principalpayment leginfo)))

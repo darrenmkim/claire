@@ -4,27 +4,27 @@
 (defn schema []
   "create table if not exists 
    breed (
-   id serial primary key,
-   name text unique not null,
-   memo text not null
+   id text primary key,
+   name text not null
    )")
 
 (defn preval []
-  [{:name "irs" :memo "interest rate swap"}
-   {:name "crs" :memo "currency swap"}
-   {:name "ftr" :memo "future"}
-   {:name "cal" :memo "call option"}
-   {:name "put" :memo "put option"}
-   {:name "cap" :memo "interest rate cap"}
-   {:name "cds" :memo "credit default swap"}
-   {:name "trs" :memo "total return swap"}
-   {:name "crd" :memo "corridor option"}
-   {:name "spt" :memo "foreign currency spot"}
-   {:name "inf" :memo "inflation swap"}
-   {:name "trl" :memo "treasury lock"}
-   {:name "rtr" :memo "reverse treasury lock"}
-   {:name "swt" :memo "swaption"}
-   {:name "cms" :memo "commodity swap"}])
+  [{:id "irs" :name "interest rate swap"}
+   {:id "crs" :name "currency swap"}
+   {:id "cal" :name "call option"}
+   {:id "put" :name "put option"}
+   {:id "cap" :name "interest rate cap"}
+   {:id "cds" :name "credit default swap"}
+   {:id "trs" :name "total return swap"}
+   {:id "crd" :name "corridor option"}
+   {:id "spt" :name "foreign currency spot"}
+   {:id "inf" :name "inflation swap"}
+   {:id "trl" :name "treasury lock"}
+   {:id "rtr" :name "reverse treasury lock"}
+   {:id "swt" :name "swaption"}
+   {:id "cms" :name "commodity swap"}
+   {:id "ftr" :name "future"}
+   ])
 
 (defn set-db! []
   (db/execute! (schema))

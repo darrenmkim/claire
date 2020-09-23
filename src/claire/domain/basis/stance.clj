@@ -2,17 +2,20 @@
   (:require [claire.center.db :as db]))
 
 (defn schema []
-  "create table if not exists 
-   stance (
-   id smallserial primary key, 
-   name text unique not null,     
-   memo text not null)")
+  (str "create table if not exists "
+       "stance ("
+       "id text primary key, "
+       "memo text not null)"))
 
 (defn preval []
-  [{:id 1 :name "pay" :memo ".."}
-   {:id 2 :name "receive" :memo ".."} 
-   {:id 3 :name "buy" :memo ".."}
-   {:id 4 :name "sell" :memo ".."}])
+  [{:id "pay" :memo
+    "entity takes pay side of mutual contract."}
+   {:id "receiv" :memo
+    "entity takes receive side of mutial contract."} 
+   {:id "buy" :memo
+    "entity buys a contingent contract."}
+   {:id "sell" :memo
+    "entity sells a contingent contract."}])
 
 (defn set-db! []
   (db/execute! (schema))

@@ -29,7 +29,16 @@
       :effectdate (tm/make-date 2013 1 5)
       :terminatedate (tm/make-date 2018 1 5)
       :maturedate (tm/make-date 2018 1 5)
-      :memo "mock deal"}]]
+      :memo "mock deal"}
+
+     {:name "collegefinance_crs"
+      :tradedate (tm/make-date 2013 1 3)
+      :effectdate (tm/make-date 2013 1 5)
+      :terminatedate (tm/make-date 2018 1 5)
+      :maturedate (tm/make-date 2018 1 5)
+      :memo "mock deal"}
+
+     ]]
     (db/insert! :deal data)))
 
 (comment

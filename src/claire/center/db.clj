@@ -1,27 +1,24 @@
 (ns claire.center.db
   (:require [clojure.java.jdbc :as jdbc]))
 
-(comment
-  "Psql commands to initialize database:
-   $ sudo -u postgres psql 
-   postgres=# create user defineadmin with password '1324';
-   postgres=# create database clairedb owner defineadmin;")
-
-(comment
-  "Psql commands to check database:
-   $ sudo -u postgres psql 
-   postgres=# forwardslash-c clairedb;")
+(comment "
+get into postgres environment: 
+$ sudo -u postgres psql 
+create user: 
+postgres=# create user admin with password '4231';
+initialize database: 
+postgres=# create database clairedb owner admin;
+")
 
 (defn dbspec []
   {:dbtype "postgresql"
    :dbname "clairedb"
    :host "localhost"
-   :user "defineadmin"
-   :password "1324"})
+   :user "admin"
+   :password "4231"})
 
 (defn execute! [sql]
-  (jdbc/execute! (dbspec)
-                 sql))
+  (jdbc/execute! (dbspec) sql))
 
 (defn insert!
   "Inserts records by two arguments that are

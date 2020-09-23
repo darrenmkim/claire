@@ -8,15 +8,15 @@
    [ring.middleware.cors :refer [wrap-cors]]
    [ring.middleware.reload :refer [wrap-reload]]
    [ring.util.response :refer [response]]
-   [claire.domain.ability :as ability]
+   [claire.domain.basis.ability :as ability]
    ))
 
 (def my-routes
   (routes
    (GET "/" [] (response "asdfdf"))
-   (GET "/abilities-all" [] (response (ability/get-all)))
-   (GET "/ability-by-id/:id" [id] (response (ability/get-one-by-id id)))
-   (GET "/abilities-count" [] (response (ability/count-all)))
+   ;; (GET "/abilities-all" [] (response (ability/get-all)))
+   ;; (GET "/ability-by-id/:id" [id] (response (ability/get-one-by-id id)))
+   ;; (GET "/abilities-count" [] (response (ability/count-all)))
    (GET "/test" [] (response {:baz "qsssux"}))
    (POST "/debug" request (response (with-out-str (pprint request))))
    (not-found {:error "Not found"})))
