@@ -5,7 +5,7 @@
   (str "create table if not exists "
        "currency ("
        "id text primary key, "
-       "memo text not null)"))
+       "name text not null)"))
 
 (defn preval []
   [{:id "dzd", :name "Algerian Dinar"}

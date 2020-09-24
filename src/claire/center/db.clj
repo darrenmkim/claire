@@ -40,7 +40,7 @@ postgres=# create database clairedb owner admin;
 (defn count-records [table format]
   (let [raw
         (get-records-by-query
-         ["select count(*) as count from " (name table)])]
+         (str "select count(*) as count from " (name table)))]
     (case format
       :num (:count (first raw))
       :data raw)))

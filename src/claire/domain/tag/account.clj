@@ -1,27 +1,16 @@
 (ns claire.domain.tag.account
   (:require [claire.center.db :as db]))
 
-(defn set-table! []
-  (let [sql
-        (str "create table if not exists "  
-             "account " "( "
-             "id integer primary key autoincrement, "
-             "name text not null unique, "
-             "number text not null unique, "
-             "statusid integer not null , "
-             "memo text not null, "
-             "constraint fkstatus "
-             "foreign key (statusid) "
-             "references status (id) " ");")]
-    (db/create-table! sql)))
+(defn schema []
+  (str "create table if not exists "  
+       "account ("
+       "id serial primary key, "
+       "name text unique not null, "
+       "number text unique not null, "
+       "memo text not null, "
+       "statusid text "
+       "references status(id) not null)"))
 
 (defn set-db! []
-  (set-table!)
+  (db/execute! (schema))
   (println "<account> table is set up."))
-
-;;; test
-(def wrong
-  {:name "Cash 2"
-   :number "12345378"
-   :statusid 999
-   :memo "test second account"})

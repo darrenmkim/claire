@@ -6,67 +6,45 @@
    ))
 
 (defn schema []
-  "create table if not exists 
-   pact (
-   id text primary key, 
-   breedid integer 
-   references breed (id) not null,
-   upfrontcost text not null, 
-   interestpayment text not null, 
-   principalpayment text not null, 
-   memo text not null
-   )")
+  (str
+   "create table if not exists "
+   "pact ("
+   "id text primary key, "
+   "breedid integer references breed(id) not null, "
+   "upfrontcost text, "
+   "interestpayments text, "
+   "principalpayment text, "
+   "memo text )"))
 
 (defn preval []
-  [
-   
+  [   
    {:id "irsfix" 
     :breedid "irs"
-    :upfrontcost "()"
-    :interestpayment "(notional * givenrate * yearfrac)"
-    :principalpayment "()"
+    :upfrontcost nil
+    :interestpayments "(notionalinlocalcur * givenrate * (months / 12))"
+    :principalpayment nil
     :memo "Fixed Leg of Interest Rate Swap"}
    
    {:id "irsflt" 
     :breedid "irs"
-    :upfrontcost "()"
-    :interestpayment "(notional * quotedrate * yearfrac)"
-    :principalpayment "()"
+    :upfrontcost nil
+    :interestpayments "(notionalinlocalcur * quotedrate * (months / 12))"
+    :principalpayment nil
     :memo "Float Leg of Interest Rate Swap"}
-
-
-
-
-
-   
-
-
-
-   
-   {:id "crsfix" 
+    
+   {:id "crsfix"
     :breedid "crs"
-    :upfrontcost ""
-    :interestpayment "(notional * givenrate * (months / 12))"
-
-    :principalpayment "(notional * 1)"
+    :upfrontcost nil
+    :interestpayments "(notionalinlocalcur * givenrate * (months / 12))"
+    :principalpayment "notionalinlocalcur"
     :memo "Fixed Leg of Interest Rate Swap"}
 
-
-
-   
-
-
-
-
-
-
-
-
+;;;;;;;;;;;;;;;;;;;;
    
    {:id "crsflt" 
     :breedid "crs"
     :upfrontcost "()"
-    :interestpayment "(notional * quotedrate * yearfrac)"
+    :interestpayments "(notional * quotedrate * yearfrac)"
     :principalpayment "()"
     :memo "Float Leg of Interest Rate Swap"}
 
@@ -74,14 +52,14 @@
    {:id "calfix" 
     :breedid "cal"
     :upfrontcost "()"
-    :interestpayment "(notional * givenrate * yearfrac)"
+    :interestpayments "(notional * givenrate * yearfrac)"
     :principalpayment "()"
     :memo "Fixed Leg of Interest Rate Swap"}
    
    {:id "crsflt" 
     :breedid "cal"
     :upfrontcost "()"
-    :interestpayment "(notional * quotedrate * yearfrac)"
+    :interestpayments "(notional * quotedrate * yearfrac)"
     :principalpayment "()"
     :memo "Float Leg of Interest Rate Swap"}
 

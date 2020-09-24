@@ -37,3 +37,6 @@
 
 (defn until [x y]
   (.until y x (java.time.temporal.ChronoUnit/DAYS)))
+
+(defn later? [x y]
+  (> (until x y) 0))

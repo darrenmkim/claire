@@ -2,11 +2,11 @@
   (:require [claire.center.db :as db]))
 
 (defn schema []
-  "create table if not exists 
-   breed (
-   id text primary key,
-   name text not null
-   )")
+  (str
+   "create table if not exists "
+   "breed ("
+   "id text primary key, "
+   "name text not null)"))
 
 (defn preval []
   [{:id "irs" :name "interest rate swap"}

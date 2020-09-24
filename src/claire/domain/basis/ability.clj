@@ -4,15 +4,14 @@
 (defn schema []
   "create table if not exists
    ability (
-   id smallserial primary key,
-   name text unique not null,
+   id text primary key,
    memo text not null)")
 
 (defn preval []
-  [{:id 1 :name "admin" :memo ".."}
-   {:id 2 :name "approver" :memo ".."}
-   {:id 3 :name "preparer" :memo ".."}
-   {:id 4 :name "viewer" :memo ".."}])
+  [{:id "admin" :memo "can do everything."}
+   {:id "approver" :memo "can approve."}
+   {:id "preparer" :memo "can prepare."}
+   {:id "viewer" :memo "can view."}])
 
 (defn set-db! []
   (db/execute! (schema))

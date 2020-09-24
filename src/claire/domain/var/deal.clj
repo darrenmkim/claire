@@ -24,14 +24,16 @@
 (defn set-mock! []
   (let
    [data
-    [{:name "abcirs01"
+    [{:id 1
+      :name "abcirs01"
       :tradedate (tm/make-date 2013 1 3)
       :effectdate (tm/make-date 2013 1 5)
       :terminatedate (tm/make-date 2018 1 5)
       :maturedate (tm/make-date 2018 1 5)
       :memo "mock deal"}
 
-     {:name "collegefinance_crs"
+     {:id 2
+      :name "collegefinance_crs"
       :tradedate (tm/make-date 2013 1 3)
       :effectdate (tm/make-date 2013 1 5)
       :terminatedate (tm/make-date 2018 1 5)
@@ -40,6 +42,3 @@
 
      ]]
     (db/insert! :deal data)))
-
-(comment
-  " ")
