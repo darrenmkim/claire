@@ -10,7 +10,7 @@
 (defn preval []
   [{:id "pay" :memo
     "entity takes pay side of mutual contract."}
-   {:id "receiv" :memo
+   {:id "receive" :memo
     "entity takes receive side of mutial contract."} 
    {:id "buy" :memo
     "entity buys a contingent contract."}

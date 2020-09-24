@@ -6,16 +6,16 @@
        "leg ("
        "id serial primary key, "
        "name text unique not null, "
-       "dealid integer references deal(id) not null, "
-       "pactid integer references pact(id) not null, "
-       "stanceid integer references stance(id) not null, "
-       "periods integer not null, "
+       "dealid int references deal(id) not null, "
+       "pactid text references pact(id) not null, "
+       "stanceid text references stance(id) not null, "
+       "period smallint not null, "
        "localcur text references currency(id) not null, "
        "spanid text references span(id) not null, "
-       "dayconvid integer references dayconv(id) not null, "
+       "dayconvid text references dayconv(id) not null, "
        "notionalinlocalcur real not null, "
        "notionalcurrate real not null, " 
-       "interestrateticker text references rate(id) not null, "
+       "interestrateticker text references ticker(id) not null, "
        "givenrate real, "
        "memo text not null)"))
 
@@ -33,7 +33,7 @@
          :dealid 2
          :pactid "irsfix"
          :stanceid "pay" ;; pay 
-         :periods 5 ;; for 5 years 
+         :period 5 ;; for 5 years 
          :spanid "semiannual"
          :dayconvid "30360"
          :localcur "usd" ;; usd 
@@ -47,8 +47,8 @@
          :name "mytest_irs_abc"
          :dealid 2
          :pactid "irsflt"
-         :stanceid "receive"
-         :periods 5
+         :stanceid "receiv"
+         :period 5
          :spanid "semiannual"
          :dayconvid "30360"
          :localcur "eur"
@@ -67,7 +67,7 @@
          :dealid 2
          :pactid "crsfix"
          :stanceid "pay" ;; pay 
-         :periods 5 ;; for 5 years 
+         :period 5 ;; for 5 years 
          :spanid "annual"
          :dayconvid "30360"
          :localcur "usd" ;; usd 
@@ -80,8 +80,8 @@
          :name "collegefinance_crs_abc"
          :dealid 2
          :pactid "crsfix"
-         :stanceid "receive"
-         :periods 5
+         :stanceid "receiv"
+         :period 5
          :spanid "annual"
          :dayconvid "30360"
          :localcur "eur"
@@ -91,7 +91,3 @@
          :givenrate 0.06
          :memo "mock leg 02"}]]
     (db/insert! :leg data)))
-
-(defn q []
-  (db/query 
-   "select * from leg"))

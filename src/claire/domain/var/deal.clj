@@ -4,23 +4,21 @@
    [claire.help.time :as tm]))
 
 (defn schema []
-  "create table if not exists 
-   deal (
-   id serial primary key,
-   name text unique not null,
-   tradedate date not null, 
-   effectdate date not null, 
-   terminatedate date not null, 
-   maturedate date not null,
-   memo text not null)")
+  (str "create table if not exists "
+       "deal ("
+       "id serial primary key, "
+       "name text unique not null, "
+       "tradedate date not null, "
+       "effectdate date not null, "
+       "terminatedate date not null, "
+       "maturedate date not null, "
+       "memo text not null)"))
 
 (defn set-db! []
   (db/execute! (schema))
   (println "<deal> table is set up."))
 
-
-;;;;;;;;;;;;;; MOCKING
-
+;; MOCKING
 (defn set-mock! []
   (let
    [data
@@ -31,7 +29,6 @@
       :terminatedate (tm/make-date 2018 1 5)
       :maturedate (tm/make-date 2018 1 5)
       :memo "mock deal"}
-
      {:id 2
       :name "collegefinance_crs"
       :tradedate (tm/make-date 2013 1 3)
@@ -39,6 +36,5 @@
       :terminatedate (tm/make-date 2018 1 5)
       :maturedate (tm/make-date 2018 1 5)
       :memo "mock deal"}
-
      ]]
     (db/insert! :deal data)))

@@ -29,7 +29,7 @@ postgres=# create database clairedb owner admin;
   (doseq [record records]
     (jdbc/insert! (dbspec) table record)))
 
-(defn get-records-by-query
+(defn query
   [sql]
   (jdbc/query (dbspec) sql))
 
@@ -39,7 +39,7 @@ postgres=# create database clairedb owner admin;
 
 (defn count-records [table format]
   (let [raw
-        (get-records-by-query
+        (query
          (str "select count(*) as count from " (name table)))]
     (case format
       :num (:count (first raw))

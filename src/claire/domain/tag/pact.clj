@@ -10,7 +10,7 @@
    "create table if not exists "
    "pact ("
    "id text primary key, "
-   "breedid integer references breed(id) not null, "
+   "breedid text references breed(id) not null, "
    "upfrontcost text, "
    "interestpayments text, "
    "principalpayment text, "
@@ -38,35 +38,6 @@
     :interestpayments "(notionalinlocalcur * givenrate * (months / 12))"
     :principalpayment "notionalinlocalcur"
     :memo "Fixed Leg of Interest Rate Swap"}
-
-;;;;;;;;;;;;;;;;;;;;
-   
-   {:id "crsflt" 
-    :breedid "crs"
-    :upfrontcost "()"
-    :interestpayments "(notional * quotedrate * yearfrac)"
-    :principalpayment "()"
-    :memo "Float Leg of Interest Rate Swap"}
-
-   
-   {:id "calfix" 
-    :breedid "cal"
-    :upfrontcost "()"
-    :interestpayments "(notional * givenrate * yearfrac)"
-    :principalpayment "()"
-    :memo "Fixed Leg of Interest Rate Swap"}
-   
-   {:id "crsflt" 
-    :breedid "cal"
-    :upfrontcost "()"
-    :interestpayments "(notional * quotedrate * yearfrac)"
-    :principalpayment "()"
-    :memo "Float Leg of Interest Rate Swap"}
-
-
-
-   
-
    ])
 
 (defn set-db! []

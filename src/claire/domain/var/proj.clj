@@ -39,6 +39,13 @@
    :interestpayments "(* notional givenrate (/ months 12))"
    :principalpayment "notional"})
 
+(defn leginfo [legid]
+  (let [sql (str "select * "
+                 "from leg as l "
+                 "left join deal as d on l.dealid = d.id "
+                 "where l.id = " (str legid))])
+  (db/query sql))
+
 ;; mocking 
 (def leginfo 
   {:legid 3
@@ -114,10 +121,7 @@
          :localcur (:localcur leginfo)
          :localamt (load-string (:principalpayment leginfo))
          :memo "abc"})))
-         
-
-
-
+     
 (defn make-projs [legid]
   (let [leginfo (make-leginfo legid)
         legproj            ;;(make-upfrontcost leginfo)
@@ -127,5 +131,4 @@
         
 
     ]
-  legproj))
-    
+  legproj))    
