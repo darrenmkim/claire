@@ -1,10 +1,13 @@
-(ns claire.domain.var.quote
+(ns claire.domain.quote
   (:require
+   [clojure.spec.alpha :as s]
    [claire.center.db :as db]
    [claire.help.time :as tm]
    [claire.help.format :as frmt]
-   [claire.domain.basis.rate :as rate]))
+   [claire.domain.base :as b]))
 
+(comment
+  "
 (defn schema []
   "create table if not exists 
    quote (
@@ -16,10 +19,6 @@
 (defn set-db! []
   (db/execute! (schema))
   (println "<quote> table is set up."))
-
-(def date)
-(def rateid 5)
-(frmt/quote-single (tm/make-date 2020 1 1))
 
 (defn find-quote
   "requires two inputs which are
@@ -62,6 +61,8 @@
      {:date (tm/make-date 1950 1 1) :rateid (rate/find-id-by-name "euribor9m") :value 0.2}
      {:date (tm/make-date 1950 1 1) :rateid (rate/find-id-by-name "euribor1y") :value 0.2}]]
     (db/insert! :quote data)))
+ ")
 
-(comment
-  " ")
+(defn make-quote [t v]
+  {:ticker (s/conform b/ticker t)  
+   :value  (s/conform double? v)})

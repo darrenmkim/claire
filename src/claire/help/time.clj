@@ -19,6 +19,9 @@
 (defn make-date [year month day]
   (jt/local-date year month day))
 
+(defn sqldate->localdate [sqldate]
+  (jt/local-date sqldate))
+
 (defn make-stamp []
   (jt/instant->sql-timestamp 
    (jt/instant)))

@@ -11,31 +11,82 @@
    "pact ("
    "id text primary key, "
    "breedid text references breed(id) not null, "
-   "upfrontcost text, "
-   "interestpayments text, "
-   "principalpayment text, "
-   "memo text )"))
+   
+   "notionaltiming text, "
+   "notionalcalc text, "
+
+   "costtiming text, "
+   "costcalc text, "
+
+   "feetiming text, "
+   "fee text, "
+
+   "interesttiming text, "
+   "interest text, "
+
+   "gainlosstiming text, "
+   "gainloss text, "
+
+   "principaltiming text, "
+   "principal text, "
+
+   
+   "memo text)"))
+
+
+
+
 
 (defn preval []
   [   
    {:id "irsfix" 
     :breedid "irs"
-    :upfrontcost nil
-    :interestpayments "(notionalinlocalcur * givenrate * (months / 12))"
-    :principalpayment nil
+    :notionaltiming "tradedate"
+    :notionalcalc "notionallocal" 
+    :costtiming nil
+    :cost nil 
+    :feetiming nil 
+    :fee nil
+    :interesttiming "span"
+    :interestcalc  "(* notionalinlocalcur givenrate (/ months 12))"
+    :gainlosstiming nil
+    :gainlosscalc nil 
+    :principaltiming nil   
+    :principalcalc nil
     :memo "Fixed Leg of Interest Rate Swap"}
    
    {:id "irsflt" 
     :breedid "irs"
-    :upfrontcost nil
-    :interestpayments "(notionalinlocalcur * quotedrate * (months / 12))"
-    :principalpayment nil
-    :memo "Float Leg of Interest Rate Swap"}
+
+    :notional "notionallocal"
+
     
+    :upfrontcost nil
+    :interestpayments "(* notionalinlocalcur quotedrate (/ months 12))"
+    :principalpayment nil
+
+
+
+    
+    :memo "Float Leg of Interest Rate Swap"}
+
+
+
+
+
+
+
+
+
+   
    {:id "crsfix"
     :breedid "crs"
+
+    :notional "notionallocal"
+
+    
     :upfrontcost nil
-    :interestpayments "(notionalinlocalcur * givenrate * (months / 12))"
+    :interestpayments "(* notionalinlocalcur givenrate (/ months 12))"
     :principalpayment "notionalinlocalcur"
     :memo "Fixed Leg of Interest Rate Swap"}
    ])
@@ -44,14 +95,3 @@
   (db/execute! (schema))
   (db/insert-pre! :pact (preval))
   (println "<pact> table is set up."))
-
-;;;; testing
-(db/query
- "select 
-  p.id as pactid, 
-  p.name as pactname, 
-  b.id as breedid, 
-  b.name as breedname
-  from pact as p 
-  left join breed as b 
-  on p.breedid = b.id")
