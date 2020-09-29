@@ -1,5 +1,7 @@
-(ns claire.center.load
-  (:require
+(ns claire.center.load)
+
+
+(comment "
    [claire.domain.basis.ability :as ability]
    [claire.domain.basis.day :as day]
    [claire.domain.basis.event :as event]
@@ -10,7 +12,6 @@
    ;[claire.domain.tag.breed :as breed]
    ;[claire.domain.tag.pact :as pact]
    ;[claire.domain.tag.rate :as rate]
-   ))
 
 (defn set-domain-db! []
   ;; basis
@@ -26,3 +27,7 @@
   ;;(pact/set-db!)
   ;;(rate/set-db!)
   )
+
+
+")
+

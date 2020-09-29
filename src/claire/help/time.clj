@@ -4,7 +4,7 @@
   (:require
    [java-time :as jt]))
 
-(defn make-date-zoned [year month day]
+(defn make-date-zoned [{:keys [year month day]}]
   (jt/zoned-date-time year month day))
 
 (defn make-years [n]
@@ -16,7 +16,7 @@
 (defn make-days [n]
   (jt/days n))
 
-(defn make-date [year month day]
+(defn make-date [{:keys [year month day]}]
   (jt/local-date year month day))
 
 (defn sqldate->localdate [sqldate]
@@ -32,14 +32,21 @@
 (defn date->str [d]
   (jt/format "yyyy-MM-dd" d))
 
-(defn add [date span]
+(defn ensure-date-type [x]
+  (if (string? x)
+    (str->date x)
+    x))
+
+(defn add [{:keys [date span]}]
   (jt/plus date span))
 
-(defn subtract [date span]
+(defn subtract [{:keys [date span]}]
   (jt/minus date span))
 
-(defn until [x y]
-  (.until y x (java.time.temporal.ChronoUnit/DAYS)))
+(defn until [{:keys [earlier later]}]
+  (let [ens-earlier (ensure-date-type earlier)
+        ens-later (ensure-date-type later)]
+    (.until ens-earlier ens-later (java.time.temporal.ChronoUnit/DAYS))))
 
-(defn later? [x y]
-  (> (until x y) 0))
+(defn later? [earlier later]
+  (> (until {:earlier earlier :later later}) 0))

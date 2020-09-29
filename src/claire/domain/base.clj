@@ -1,18 +1,6 @@
 (ns claire.domain.base
-  (:require [clojure.spec.alpha :as s]))
-
-(s/def ::id (s/and int? #(> % 0)))
-(s/def ::name string?)
-(s/def ::period int?)
-(s/def ::notional double?)
-(s/def ::contractnum int?)
-(s/def ::quote (s/and double? #(> % 0)))
-(s/def ::fixedquote
-  (s/keys :req [::ticker ::quote]))
-(s/def ::movingticker
-  (s/keys :req [::ticker]))
-(s/def ::notional (s/and double? #(> % 0)))
-(s/def ::memo string?)
+  (:require [clojure.spec.alpha :as s]
+            [claire.help.time :as t]))
 
 (s/def ::ability 
   {:admin {:memo "can do everything."}
@@ -274,27 +262,137 @@
    :usn {:name "US Dollar (Next day)"}
    :xxx {:name "The codes assigned for transactions where no currency is involved"}})
 
-(s/def ::leg
-  (s/keys :req [::id
-                ::name
-                ::pact
-                ::stance
-                ::period
-                ::span
-                ::day
-                ::contractnum
-                ::fixedquote
-                ::movingticker
-                ::notional
-                ::memo]))
+(defn make-quote
+  [{:keys [ticker number]}]
+  (let [quote
+        {:ticker (if (string? ticker)
+                   (keyword ticker)
+                   (s/conform ::ticker ticker))
+         :number (s/conform double? number)}]
+    quote))
 
-(s/def ::deal
-  (s/keys :req [::name
-                ::tradedate
-                ::effectdate
-                ::terminatedate
-                ::maturedate
-                ::leg
-                ]
-          :opt [::id
-                ::memo]))
+(defn make-money
+  [{:keys [currency number]}]
+  (let [money
+        {:ticker (if (string? currency)
+                   (keyword currency)
+                   (s/conform ::currency currency))
+         :number (s/conform double? number)}]
+    money))
+
+(s/def ::id
+  (s/and int? #(> % 0)))
+
+(s/def ::count
+  (s/and int? #(> % 0)))
+
+(s/def ::name
+  (s/and string?))
+
+(s/def ::memo
+  (s/and string?))
+
+(s/def ::actual
+  (s/and boolean?))
+
+(defn make-leg
+  [{:keys [id name pact stance period span day
+           contractnum tickerfixed fixedrate tickerfloating
+           notionalcurrency notionalamount memo]}]
+  {:id (s/conform ::id id) 
+   :name (s/conform ::name name) 
+   :pact (s/conform ::pact pact) 
+   :stance (s/conform ::stance stance)
+   :period (s/conform ::count period) 
+   :span (s/conform ::span span) 
+   :day (s/conform ::day day) 
+   :contractnum  (s/conform ::count contractnum) 
+   :fixedquote (make-quote {:ticker tickerfixed :number fixedrate})
+   :tickerfloating (s/conform ::ticker tickerfloating)
+   :notional (make-money {:currency notionalcurrency :number notionalamount}) 
+   :memo (s/conform ::memo memo)
+   })
+
+(defn make-deal
+  [{:keys [id name breed tradedate effectdate
+           terminatedate maturedate leg memo]}]
+  {:id (s/conform ::id id) 
+   :name (s/conform ::name name) 
+   :breed (s/conform ::breed breed) 
+   :tradedate tradedate
+   :effectdate effectdate
+   :terminatedate (if (nil? terminatedate) 
+                    nil 
+                    terminatedate)
+   :maturedate maturedate
+   :leg (s/conform vector? leg)
+   :memo (s/conform ::memo memo) 
+   })
+
+(defn make-proj
+  [{:keys [id date dealid legid event
+           periodstart periodend interestticker
+           interestnumber notionalcurrency
+           notionalamount actual]}]
+  {:id (s/conform ::id id)
+   :date (t/ensure-date-type date)
+   :dealid (s/conform ::id dealid)
+   :legid (s/conform ::id legid)
+   :event (s/conform ::event event)
+   :periodstart (t/ensure-date-type periodstart)
+   :periodend (t/ensure-date-type periodend)
+   :daysinperiod (t/until {:earlier periodstart :later periodend})
+   :interestquote (make-quote {:ticker interestticker :number interestnumber})
+   :notional (make-money {:currency notionalcurrency :number notionalamount})
+   :actual (s/conform ::actual actual)
+   })
+
+
+
+
+
+;;;;;;;;;;;;;;;;
+
+(def testleg
+  (make-leg {:id 12
+             :name "abc"
+             :pact :irsfix
+             :stance :receive
+             :period 10
+             :span :annual
+             :day :dac360
+             :contractnum 1
+             :tickerfixed :libor1y
+             :fixedrate 0.0123
+             :tickerfloating :libor6m
+             :notionalcurrency :usd
+             :notionalamount 12.12
+             :memo "AA"}))
+
+(def mydeal
+  (make-deal {:id 123
+              :name "Abcd deal"
+              :breed :irs
+              :tradedate "2020-02-02"
+              :effectdate "2020-04-12"
+              :terminatedate nil
+              :maturedate "2020-02-22"
+              :leg [testleg]
+              :memo "asdf"
+              }))
+
+(def myproj
+  (make-proj {:id 222
+              :date "2019-11-22"
+              :dealid 1
+              :legid 2
+              :event :contract
+              :periodstart "2019-06-12"
+              :periodend "2019-08-22"
+              :interestticker :libor1y
+              :interestnumber 0.23
+              :notionalcurrency :eur
+              :notionalamount 100000.0
+              :actual false }))
+
+
