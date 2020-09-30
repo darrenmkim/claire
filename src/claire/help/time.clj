@@ -37,6 +37,11 @@
     (str->date x)
     x))
 
+(defn ensure-date-string [x]
+  (if (string? x)
+    x (date->str x)
+    ))
+
 (defn add [{:keys [date span]}]
   (jt/plus date span))
 

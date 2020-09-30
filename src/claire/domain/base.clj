@@ -335,17 +335,25 @@
            interestnumber notionalcurrency
            notionalamount actual]}]
   {:id (s/conform ::id id)
-   :date (t/ensure-date-type date)
+   :date (t/ensure-date-string date)
    :dealid (s/conform ::id dealid)
    :legid (s/conform ::id legid)
    :event (s/conform ::event event)
-   :periodstart (t/ensure-date-type periodstart)
-   :periodend (t/ensure-date-type periodend)
-   :daysinperiod (t/until {:earlier periodstart :later periodend})
+   :periodstart (if (nil? periodstart) nil (t/ensure-date-string periodstart))
+   :periodend (if (nil? periodend) nil (t/ensure-date-string periodend))
+   :daysinperiod (if (nil? periodstart) nil (t/until {:earlier periodstart :later periodend}))
    :interestquote (make-quote {:ticker interestticker :number interestnumber})
    :notional (make-money {:currency notionalcurrency :number notionalamount})
    :actual (s/conform ::actual actual)
    })
+
+
+
+
+
+
+
+
 
 
 ;;;;;;;;;;;;;;;;
@@ -374,7 +382,7 @@
               :effectdate "2020-04-12"
               :terminatedate nil
               :maturedate "2020-02-22"
-              :leg [testleg]
+              :leg [testleg testleg]
               :memo "asdf"
               }))
 

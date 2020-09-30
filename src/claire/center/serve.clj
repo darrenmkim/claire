@@ -8,7 +8,9 @@
    [ring.middleware.cors :refer [wrap-cors]]
    [ring.middleware.reload :refer [wrap-reload]]
    [ring.util.response :refer [response]]
-   [claire.domain.base :as b]))
+   [claire.domain.base :as b]
+   [claire.domain.proj :as p]
+   ))
 
 (def my-routes
   (routes
@@ -16,6 +18,7 @@
    (GET "/test" [] (response {:baz "qsssux"}))
    (GET "/leg" [] (response b/testleg))
    (GET "/deal" [] (response b/mydeal))
+   (GET "/proj" [] (response p/myprojs))
    (POST "/quote" request (let [t (get (:params request) :ticker)
                                 v (get (:params request) :value)]
                             (b/make-quote t v)))
