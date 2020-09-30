@@ -2,85 +2,111 @@
   (:require [clojure.spec.alpha :as s]
             [claire.help.time :as t]))
 
-(s/def ::ability 
-  {:admin {:memo "can do everything."}
-   :approver {:memo "can approve."}
-   :preparer {:memo "can prepare."}
-   :viewer {:memo "can view."}})
+(defn get-ability [key]
+  (case key
+    :admin {:key :admin :memo "can do everything."}
+    :approver {:key :approver :memo "can approve."}
+    :preparer {:key :preparer :memo "can prepare."}
+    :viewer {:key :viewer :memo "can view."}
+    :none))
 
-(s/def ::stance {:pay {:memo "entity takes pay side of mutual contract."}
-             :receive {:memo "entity takes receive side of mutial contract."}
-             :buy {:memo "entity buys a contingent contract."}
-             :sell {:memo "entity sells a contingent contract."}})
+(defn get-stance [key]
+  (case key
+    :pay {:key :pay :memo "entity takes pay side of mutual contract."}
+    :receive {:key :receive :memo "entity takes receive side of mutial contract."}
+    :buy {:key :buy :memo "entity buys a contingent contract."}
+    :sell {:key :sell :memo "entity sells a contingent contract."}
+    :none))
 
-(s/def ::event {:contract {:memo ".."}
-            :effect {:memo ".."}
-            :pay {:memo ".."}
-            :receive {:memo ".."}
-            :accrue {:memo ".."}
-            :valuate {:memo ".."}
-            :reduce {:memo ".."}
-            :terminate {:memo ".."}
-            :mature {:memo ".."}
-            :fee {:memo ".."}})
+(defn get-event [key]
+  (case key
+    :contract {:key :contract :memo ".."}
+    :effect {:key :effect :memo ".."}
+    :interest {:key :interest :memo ".."}
+    :reduce {:key :reduce :memo ".."}
+    :terminate {:key :terminate :memo ".."}
+    :mature {:key :mature :memo ".."}
+    :none))
 
-(s/def ::span
-  {:continuous {:month 0 :memo ".."}
-   :month {:month 1 :memo ".."}
-   :quarter {:month 3 :memo ".."}
-   :semiannual {:month 6 :memo ".."}
-   :annual {:month 12 :memo ".."}
-   :biannual {:month 24 :memo ".."}
-   :none {:month 0 :memo ".."}})
+(defn get-span [key]
+  (case key
+    :continuous {:key :continuous  
+                 :num-month 0 
+                 :year-frac (/ 0 12)}
+    :month {:key :month
+            :num-month 1
+            :year-frac (/ 1 12)}
+    :quarter {:key :quarter 
+              :num-month 3   
+              :year-frac (/ 3 12)}
+    :semiannual {:key :semiannual  
+                 :num-month 6 
+                 :year-frac (/ 6 12)}
+    :annual {:key :annual 
+             :num-month 12  
+             :year-frac (/ 12 12)}
+    :biannual {:key  :biannual 
+               :num-month 24  
+               :year-frac (/ 24 12)}
+    :none))
 
-(s/def ::status
-  {:posted {:memo ".."}
-   :drafted {:memo ".."}
-   :deleted {:memo ".."}})
+(defn get-status [key]
+  (case key
+    :posted {:key :posted :memo ".."}
+    :drafted {:key :drafted :memo ".."}
+    :deleted {:key :deleted :memo ".."}
+    :none))
 
-(s/def ::day
-  {:d30360 {:name "30360" :memo ".."}
-   :dac360 {:name "AC360" :memo ".."}})
+(defn get-day [key]
+  (case key
+    :d30360 {:key :d30360 :name "30360" :memo ".."}
+    :dac360 {:key :dac360 :name "AC360" :memo ".."}))
 
-(s/def ::breed
-  {:irs {:name "Interest Rate Swap"}
-   :crs {:name "currency swap"}
-   :cal {:name "call option"}
-   :put {:name "put option"}
-   :cap {:name "interest rate cap"}
-   :cds {:name "credit default swap"}
-   :trs {:name "total return swap"}
-   :crd {:name "corridor option"}
-   :spt {:name "foreign currency spot"}
-   :inf {:name "inflation swap"}
-   :trl {:name "treasury lock"}
-   :rtr {:name "reverse treasury lock"}
-   :swt {:name "swaption"}
-   :cms {:name "commodity swap"}
-   :ftr {:name "future"}})
+(defn get-breed [key]
+  (case key
+    :irs {:key :irs :name "Interest Rate Swap"}
+    :crs {:key :crs :name "currency swap"}
+    :cal {:key :cal :name "call option"}
+    :put {:key :put :name "put option"}
+    :cap {:key :cap :name "interest rate cap"}
+    :cds {:key :cds :name "credit default swap"}
+    :trs {:key :trs :name "total return swap"}
+    :crd {:key :crd :name "corridor option"}
+    :spt {:key :spt :name "foreign currency spot"}
+    :inf {:key :inf :name "inflation swap"}
+    :trl {:key :trl :name "treasury lock"}
+    :rtr {:key :rtr :name "reverse treasury lock"}
+    :swt {:key :swt :name "swaption"}
+    :cms {:key :cms :name "commodity swap"}
+    :ftr {:key :ftr :name "future"}
+    :none))
 
-(s/def ::pact
-  {:irsfix {:name "interest rate swap fixed leg"}
-   :irsflt {:name "interest rate swap floating leg"}})
+(defn get-pact [key]
+  (case key
+    :irsfix {:key :irsfix :name "interest rate swap fixed leg"}
+    :irsflt {:key :irsflt :name "interest rate swap floating leg"}
+    :none))
 
-(s/def ::ticker
-  {:fixed {:memo "fixed and not use market tickers"}
-   :libor1d {:memo "libor 1 day"}
-   :libor1w {:memo "libor 1 week"}
-   :libor2w {:memo "libor 2 weeks"}
-   :libor1m {:memo "libor 1 month"}
-   :libor2m {:memo "libor 2 months"}
-   :libor3m {:memo "libor 3 months"}
-   :libor6m {:memo "libor 6 months"}
-   :libor1y {:memo "libor 1 year"}
-   :euribor1w {:memo "euribor 1 week"}
-   :euribor2w {:memo "euribor 2 weeks"}
-   :euribor1m {:memo "euribor 1 month"}
-   :euribor2m {:memo "euribor 2 months"}
-   :euribor3m {:memo "euribor 3 months"}
-   :euribor6m {:memo "euribor 6 months"}
-   :euribor9m {:memo "euribor 9 months"}
-   :euribor1y {:memo "euribor 1 year"}})
+(defn get-ticker [key]
+  (case key
+    :fixed {:key :fixed :memo "fixed and not use market tickers"}
+    :libor1d {:key :libor1d :memo "libor 1 day"}
+    :libor1w {:key :libor1w :memo "libor 1 week"}
+    :libor2w {:key :libor2w :memo "libor 2 weeks"}
+    :libor1m {:key :libor1m :memo "libor 1 month"}
+    :libor2m {:key :libor2m :memo "libor 2 months"}
+    :libor3m {:key :libor3m :memo "libor 3 months"}
+    :libor6m {:key :libor6m :memo "libor 6 months"}
+    :libor1y {:key :libor1y :memo "libor 1 year"}
+    :euribor1w {:key :euribor1w :memo "euribor 1 week"}
+    :euribor2w {:key :euribor2w :memo "euribor 2 weeks"}
+    :euribor1m {:key :euribor1m :memo "euribor 1 month"}
+    :euribor2m {:key :euribor2m :memo "euribor 2 months"}
+    :euribor3m {:key :euribor3m :memo "euribor 3 months"}
+    :euribor6m {:key :euribor6m :memo "euribor 6 months"}
+    :euribor9m {:key :euribor9m :memo "euribor 9 months"}
+    :euribor1y {:key :euribor1y :memo "euribor 1 year"}
+    :none))
 
 (s/def ::currency 
   {:dzd {:name "Algerian Dinar"}
@@ -280,44 +306,49 @@
          :number (s/conform double? number)}]
     money))
 
-(s/def ::id
-  (s/and int? #(> % 0)))
 
-(s/def ::count
-  (s/and int? #(> % 0)))
+(defn make-id [n]
+  (if (and (int? n)
+           #(> % 0))
+    n :fail))
 
-(s/def ::name
-  (s/and string?))
+(defn make-count [n]
+  (if (and (int? n)
+           #(> % 0))
+    n :fail))
 
-(s/def ::memo
-  (s/and string?))
+(defn make-name [s]
+  (if (string? s) s :fail))
 
-(s/def ::actual
-  (s/and boolean?))
+(defn make-memo [s]
+  (if (string? s) s :fail))
+
+(defn make-actual [b]
+  (if (boolean? b) b :fail))
 
 (defn make-leg
   [{:keys [id name pact stance period span day
            contractnum tickerfixed fixedrate tickerfloating
            notionalcurrency notionalamount memo]}]
-  {:id (s/conform ::id id) 
-   :name (s/conform ::name name) 
-   :pact (s/conform ::pact pact) 
-   :stance (s/conform ::stance stance)
-   :period (s/conform ::count period) 
-   :span (s/conform ::span span) 
-   :day (s/conform ::day day) 
+  {:id (make-id id) 
+   :name (make-name name) 
+   :pact (get-pact pact)
+   :stance (get-stance stance)
+   :period (make-count period) 
+   :span (get-span span) 
+   :day (get-day day) 
    :contractnum  (s/conform ::count contractnum) 
    :fixedquote (make-quote {:ticker tickerfixed :number fixedrate})
-   :tickerfloating (s/conform ::ticker tickerfloating)
+   :tickerfloating (get-ticker tickerfloating)
    :notional (make-money {:currency notionalcurrency :number notionalamount}) 
-   :memo (s/conform ::memo memo)
+   :memo (make-memo memo)
    })
 
 (defn make-deal
   [{:keys [id name breed tradedate effectdate
            terminatedate maturedate leg memo]}]
-  {:id (s/conform ::id id) 
-   :name (s/conform ::name name) 
+  {:id (make-id id) 
+   :name (make-name name)
    :breed (s/conform ::breed breed) 
    :tradedate tradedate
    :effectdate effectdate
@@ -334,17 +365,17 @@
            periodstart periodend interestticker
            interestnumber notionalcurrency
            notionalamount actual]}]
-  {:id (s/conform ::id id)
+  {:id (make-id id)
    :date (t/ensure-date-string date)
-   :dealid (s/conform ::id dealid)
-   :legid (s/conform ::id legid)
-   :event (s/conform ::event event)
+   :dealid (make-id dealid)
+   :legid (make-id legid)
+   :event (get-event event)
    :periodstart (if (nil? periodstart) nil (t/ensure-date-string periodstart))
    :periodend (if (nil? periodend) nil (t/ensure-date-string periodend))
    :daysinperiod (if (nil? periodstart) nil (t/until {:earlier periodstart :later periodend}))
    :interestquote (make-quote {:ticker interestticker :number interestnumber})
    :notional (make-money {:currency notionalcurrency :number notionalamount})
-   :actual (s/conform ::actual actual)
+   :actual (make-actual actual)
    })
 
 
