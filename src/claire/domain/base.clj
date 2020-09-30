@@ -348,9 +348,6 @@
    })
 
 
-
-
-
 ;;;;;;;;;;;;;;;;
 
 (def testleg
@@ -394,5 +391,3 @@
               :notionalcurrency :eur
               :notionalamount 100000.0
               :actual false }))
-
-
