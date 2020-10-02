@@ -1,4 +1,4 @@
-(ns claire.domain.proj
+(ns claire.proj
   (:require
    [claire.center.db :as db]
    [claire.domain.base :as b]
@@ -7,30 +7,7 @@
   ;; [infix.macros :refer [infix]]
    ))
 
-(defn schema []
-  (str "create table if not exists "
-       "proj ("
-       "id serial primary key, "
-       "date date not null, "
-       "leg-id int references leg(id) not null, "
-       "eventid int references event(id) not null, "
-       "notionallocal real, "
-       "notionalbase real, "
-       "cashlocal real, "
-       "cashbase real, " 
-       "accrstart date, "
-       "accrend date,   "
-       "tickerid text references ticker(id), "
-       "quote real, "
-       "basecur text not null, "
-       "baseamt real not null, "
-       "localcur text not null, "
-       "localamt real not null, "
-       "memo text not null)"))
 
-(defn set-db! []
-  (db/execute! (schema))
-  (println "<proj> table is set up."))
 
 (defn make-contract-proj [deal leg-index]
   (let [breed (:breed deal)

@@ -1,4 +1,4 @@
-(ns claire.center.db
+(ns claire.db
   (:require [clojure.java.jdbc :as jdbc]))
 
 (comment "

@@ -1,4 +1,4 @@
-(ns claire.help.time
+(ns claire.time
   (:refer-clojure
    :exclude [range iterate format max min])
   (:require

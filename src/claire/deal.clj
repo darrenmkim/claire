@@ -1,4 +1,4 @@
-(ns claire.domain.var.deal
+(ns claire.deal
   (:require
    [claire.center.db :as db]
    [claire.help.time :as tm]
@@ -14,28 +14,6 @@
 (def myusd (s/conform b/currency :usd))
 
 
-(defn schema []
-  (str "create table if not exists "
-       "deal ("
-       "id serial primary key, "
-       "name text unique not null, "
-       "categorya text references category(name) not null, "
-       "categoryb text references category(name) not null, "
-       "categoryc text references category(name) not null, "
-       "categoryd text references category(name) not null, "
-       "categorye text references category(name) not null, "
-       "categoryf text references category(name) not null, "
-       "categoryg text references category(name) not null, "    
-       "breedid text references breed(id) not null, "
-       "tradedate date not null, "
-       "effectdate date not null, "
-       "terminatedate date not null, "
-       "maturedate date not null, "
-       "memo text not null)"))
-
-(defn set-db! []
-  (db/execute! (schema))
-  (println "<deal> table is set up."))
 
 ;; MOCKING
 (defn set-mock! []
