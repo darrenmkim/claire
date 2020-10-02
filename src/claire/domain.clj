@@ -128,30 +128,6 @@
                     {:id "usd" :name "US Dollar"}
                     {:id "eur" :name "Euro"}]})
 
-(defn set-static! []
-  (db/execute! (:ability-schema static))
-  (db/execute! (:stance-schema static))
-  (db/execute! (:event-schema static))
-  (db/execute! (:span-schema static))
-  (db/execute! (:status-schema static))
-  (db/execute! (:day-schema static))
-  (db/execute! (:breed-schema static))
-  (db/execute! (:pact-schema static))
-  (db/execute! (:strategy-schema static))
-  (db/execute! (:ticker-schema static))
-  (db/execute! (:currency-schema static))
-  (db/insert-pre! :ability (:ability-value static))
-  (db/insert-pre! :stance (:stance-value static))
-  (db/insert-pre! :event (:event-value static))
-  (db/insert-pre! :span (:span-value static))
-  (db/insert-pre! :status (:status-value static))
-  (db/insert-pre! :day (:day-value static))
-  (db/insert-pre! :breed (:breed-value static))
-  (db/insert-pre! :pact (:pact-value static))
-  (db/insert-pre! :strategy (:strategy-value static))
-  (db/insert-pre! :ticker (:ticker-value static))
-  (db/insert-pre! :currency (:currency-value static)))
-
 
 ;;;; dynamic ;;;; 
 
@@ -283,6 +259,33 @@
                          "entry_currency text references currency(id) not null, "
                          "entry_amount real not null, "
                          "memo text)")})
+
+
+;;;; set ;;;;
+
+(defn set-static! []
+  (db/execute! (:ability-schema static))
+  (db/execute! (:stance-schema static))
+  (db/execute! (:event-schema static))
+  (db/execute! (:span-schema static))
+  (db/execute! (:status-schema static))
+  (db/execute! (:day-schema static))
+  (db/execute! (:breed-schema static))
+  (db/execute! (:pact-schema static))
+  (db/execute! (:strategy-schema static))
+  (db/execute! (:ticker-schema static))
+  (db/execute! (:currency-schema static))
+  (db/insert-pre! :ability (:ability-value static))
+  (db/insert-pre! :stance (:stance-value static))
+  (db/insert-pre! :event (:event-value static))
+  (db/insert-pre! :span (:span-value static))
+  (db/insert-pre! :status (:status-value static))
+  (db/insert-pre! :day (:day-value static))
+  (db/insert-pre! :breed (:breed-value static))
+  (db/insert-pre! :pact (:pact-value static))
+  (db/insert-pre! :strategy (:strategy-value static))
+  (db/insert-pre! :ticker (:ticker-value static))
+  (db/insert-pre! :currency (:currency-value static)))
 
 (defn set-dynamic! []
   (db/execute! (:client-schema dynamic))
