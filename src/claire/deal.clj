@@ -1,9 +1,9 @@
 (ns claire.deal
   (:require
-   [claire.center.db :as db]
-   [claire.help.time :as tm]
+   [claire.db :as db]
+   [claire.time :as tm]
    [clojure.spec.alpha :as s]
-   [claire.domain.base :as b]))
+   [claire.domain :as b]))
 
 
 (def ttt (s/conform b/stances :pay))

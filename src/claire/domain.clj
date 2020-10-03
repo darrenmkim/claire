@@ -1,7 +1,9 @@
 (ns claire.domain
-  (:require [clojure.spec.alpha :as s]
-            [claire.help.time :as t]
-            [claire.db :as db]))
+  (:require
+   ;;[clojure.spec.alpha :as sp]
+   ;;[claire.time :as tm]
+   [claire.db :as db]))
+
 
 
 ;;;; static ;;;;
@@ -141,6 +143,16 @@
                          "functional_currency text references currency(id) not null, "
                          "reporting_currency text references currency(id) not null, "
                          "memo text)")
+   :client-make          '(defn make-client
+                            [{:keys [id short_name legal_name base_currency
+                                     functional_currency reporting_currency memo]}]
+                            {:id id
+                             :short_name short_name
+                             :legal_name legal_name
+                             :base_currency base_currency
+                             :functional_currency functional_currency
+                             :reporting_currency reporting_currency
+                             :memo memo})
    :person-schema   (str "create table if not exists "
                          "person ("
                          "id serial primary key, "
@@ -150,8 +162,17 @@
                          "first_name text not null, "
                          "last_name text not null, "
                          "phone text)")
-   :category-schema (str "drop type if exists category_class;"
-                         "create type "
+   :person-make          '(defn make-person
+                            [{:keys [id client_id username email
+                                     first_name last_name phone]}]
+                            {:id id
+                             :client_id client_id
+                             :username username 
+                             :email email
+                             :first_name first_name 
+                             :last_name last_name
+                             :phone phone})
+   :category-schema (str "create type "
                          "category_class as enum ("
                          "'a', 'b', 'c', 'd', 'e', 'f', 'g'); "
                          "create table if not exists "
@@ -159,13 +180,28 @@
                          "id text primary key, "
                          "class category_class not null, "
                          "client_id int references client(id) not null)")
+   :category-make        '(defn make-category
+                            [{:keys [id class client_id]}]
+                            {:id id
+                             :class class
+                             :client_id client_id})                     
    :account-schema  (str "create table if not exists "
                          "account ("
                          "id serial primary key, "
+                         "client_id int references client(id) not null, "
                          "account_name text unique not null, "
                          "account_number text unique not null, "
-                         "memo text not null, "
-                         "active boolean not null) ")
+                         "active boolean not null, "
+                         "memo text not null)")
+   :account-make         '(defn make-account
+                            [{:keys [id client_id account_name
+                                     account_number active memo]}]
+                            {:id id
+                             :client_id client_id
+                             :account_name account_name
+                             :account_number account_number
+                             :active active
+                             :memo memo}) 
    :matrix-schema   (str "create table if not exists "
                          "matrix " "( "
                          "id serial primary key, "
@@ -181,15 +217,6 @@
                          "date date not null, "
                          "ticker_id text references ticker(id) not null, "
                          "rate real not null, "
-                         "memo text)")
-   :roll-schema     (str "create table if not exists "
-                         "roll ("
-                         "id serial primary key, "
-                         "order_timestamp timestamptz not null, "
-                         "system_start_date date not null, "
-                         "system_end_date date not null, "
-                         "client_id int references client(id) not null, "
-                         "status_id text references status(id) not null, "
                          "memo text)")
    :deal-schema     (str "create table if not exists "
                          "deal ("
@@ -212,9 +239,14 @@
                          "leg ("
                          "id serial primary key, "
                          "leg_name text unique not null, "
+                         "trade_date date not null, "
+                         "effect_date date not null, "
+                         "terminate_date date not null, "
+                         "mature_date date not null, "                         
                          "deal_id int references deal(id) not null, "
                          "pact_id text references pact(id) not null, "
                          "stance_id text references stance(id) not null, "
+                         "num_contract int not null, "
                          "period_count smallint not null, "
                          "span_id text references span(id) not null, "
                          "day_id text references day(id) not null, "
@@ -222,6 +254,15 @@
                          "notional_amount real not null, "
                          "fixed_rate_ticker text references ticker(id) not null, "
                          "fixed_rate_number real, "
+                         "memo text)")
+   :roll-schema     (str "create table if not exists "
+                         "roll ("
+                         "id serial primary key, "
+                         "order_timestamp timestamptz not null, "
+                         "system_start_date date not null, "
+                         "system_end_date date not null, "
+                         "client_id int references client(id) not null, "
+                         "status_id text references status(id) not null, "
                          "memo text)")
    :proj-schema     (str "create table if not exists "
                          "proj ("
@@ -237,6 +278,8 @@
                          "interest_rate_number real, "
                          "amount real not null, "
                          "memo text not null)")
+   :tran-record          '(defrecord tran [id date leg_id event_id notional_currency notional_amount accrue_start_date
+                                          accrue_end_date date interest_rate_ticker interest_rate_number amount memo])
    :tran-schema     (str "create table if not exists "
                          "tran ("
                          "id serial primary key, "
@@ -251,6 +294,7 @@
                          "interest_rate_number real, "
                          "amount real not null, "
                          "memo text not null)")
+   :journal-record       '(defrecord journal [id name])
    :journal-schema  (str "create table if not exists "
                          "journal ("
                          "id serial primary key, "
@@ -334,54 +378,61 @@
     (db/insert! :category data)))
 
 
-(defn make-leg
-  [{:ids [id name pact stance period span day
-          contractnum tickerfixed fixedrate tickerfloating
-          notionalcurrency notionalamount memo]}]
-  {:id (make-id id)
-   :name (make-name name)
-   :pact (get-pact pact)
-   :stance (get-stance stance)
-   :period (make-count period)
-   :span (get-span span)
-   :day (get-day day)
-   :contractnum  (s/conform ::count contractnum)
-   :fixedquote (make-quote {:ticker tickerfixed :number fixedrate})
-   :tickerfloating (get-ticker tickerfloating)
-   :notional (make-money {:currency notionalcurrency :number notionalamount})
-   :memo (make-memo memo)})
 
-(defn make-deal
-  [{:ids [id name breed tradedate effectdate
-          terminatedate maturedate leg memo]}]
-  {:id (make-id id)
-   :name (make-name name)
-   :breed (s/conform ::breed breed)
-   :tradedate tradedate
-   :effectdate effectdate
-   :terminatedate (if (nil? terminatedate)
-                    nil
-                    terminatedate)
-   :maturedate maturedate
-   :leg (s/conform vector? leg)
-   :memo (s/conform ::memo memo)})
 
-(defn make-proj
-  [{:ids [id date dealid legid event
-          periodstart periodend interestticker
-          interestnumber notionalcurrency
-          notionalamount actual]}]
-  {:id (make-id id)
-   :date (t/ensure-date-string date)
-   :dealid (make-id dealid)
-   :legid (make-id legid)
-   :event (get-event event)
-   :periodstart (if (nil? periodstart) nil (t/ensure-date-string periodstart))
-   :periodend (if (nil? periodend) nil (t/ensure-date-string periodend))
-   :daysinperiod (if (nil? periodstart) nil (t/until {:earlier periodstart :later periodend}))
-   :interestquote (make-quote {:ticker interestticker :number interestnumber})
-   :notional (make-money {:currency notionalcurrency :number notionalamount})
-   :actual (make-actual actual)})
+
+
+
+#_
+
+(comment "(defn make-leg
+           [{:ids [id name pact stance period span day
+                   contractnum tickerfixed fixedrate tickerfloating
+                   notionalcurrency notionalamount memo]}]
+           {:id (make-id id)
+            :name (make-name name)
+            :pact (get-pact pact)
+            :stance (get-stance stance)
+            :period (make-count period)
+            :span (get-span span)
+            :day (get-day day)
+            :contractnum  (s/conform ::count contractnum)
+            :fixedquote (make-quote {:ticker tickerfixed :number fixedrate})
+            :tickerfloating (get-ticker tickerfloating)
+            :notional (make-money {:currency notionalcurrency :number notionalamount})
+            :memo (make-memo memo)})
+
+         (defn make-deal
+           [{:ids [id name breed tradedate effectdate
+                   terminatedate maturedate leg memo]}]
+           {:id (make-id id)
+            :name (make-name name)
+            :breed (s/conform ::breed breed)
+            :tradedate tradedate
+            :effectdate effectdate
+            :terminatedate (if (nil? terminatedate)
+                             nil
+                             terminatedate)
+            :maturedate maturedate
+            :leg (s/conform vector? leg)
+            :memo (s/conform ::memo memo)})
+
+         (defn make-proj
+           [{:ids [id date dealid legid event
+                   periodstart periodend interestticker
+                   interestnumber notionalcurrency
+                   notionalamount actual]}]
+           {:id (make-id id)
+            :date (t/ensure-date-string date)
+            :dealid (make-id dealid)
+            :legid (make-id legid)
+            :event (get-event event)
+            :periodstart (if (nil? periodstart) nil (t/ensure-date-string periodstart))
+            :periodend (if (nil? periodend) nil (t/ensure-date-string periodend))
+            :daysinperiod (if (nil? periodstart) nil (t/until {:earlier periodstart :later periodend}))
+            :interestquote (make-quote {:ticker interestticker :number interestnumber})
+            :notional (make-money {:currency notionalcurrency :number notionalamount})
+            :actual (make-actual actual)})
 
 
 
@@ -394,43 +445,46 @@
 
 ;;;;;;;;;;;;;;;;
 
-(def testleg
-  (make-leg {:id 12
-             :name "abc"
-             :pact :irsfix
-             :stance :receive
-             :period 10
-             :span :annual
-             :day :dac360
-             :contractnum 1
-             :tickerfixed :libor1y
-             :fixedrate 0.0123
-             :tickerfloating :libor6m
-             :notionalcurrency :usd
-             :notionalamount 12.12
-             :memo "AA"}))
+         (def testleg
+           (make-leg {:id 12
+                      :name \"abc\"
+                      :pact :irsfix
+                      :stance :receive
+                      :period 10
+                      :span :annual
+                      :day :dac360
+                      :contractnum 1
+                      :tickerfixed :libor1y
+                      :fixedrate 0.0123
+                      :tickerfloating :libor6m
+                      :notionalcurrency :usd
+                      :notionalamount 12.12
+                      :memo \"AA\"}))
 
-(def mydeal
-  (make-deal {:id 123
-              :name "Abcd deal"
-              :breed :irs
-              :tradedate "2020-02-02"
-              :effectdate "2020-04-12"
-              :terminatedate nil
-              :maturedate "2020-02-22"
-              :leg [testleg testleg]
-              :memo "asdf"}))
+         (def mydeal
+           (make-deal {:id 123
+                       :name \"Abcd deal\"
+                       :breed :irs
+                       :tradedate \"2020-02-02\"
+                       :effectdate \"2020-04-12\"
+                       :terminatedate nil
+                       :maturedate \"2020-02-22\"
+                       :leg [testleg testleg]
+                       :memo \"asdf\"}))
 
-(def myproj
-  (make-proj {:id 222
-              :date "2019-11-22"
-              :dealid 1
-              :legid 2
-              :event :contract
-              :periodstart "2019-06-12"
-              :periodend "2019-08-22"
-              :interestticker :libor1y
-              :interestnumber 0.23
-              :notionalcurrency :eur
-              :notionalamount 100000.0
-              :actual false}))
+ (def myproj
+           (make-proj {:id 222
+                       :date "2019-11-22"
+                       :dealid 1
+                       :legid 2
+                       :event :contract
+                       :periodstart "2019-06-12"
+                       :periodend "2019-08-22"
+                       :interestticker :libor1y
+                       :interestnumber 0.23
+                       :notionalcurrency :eur
+                       :notionalamount 100000.0
+                       :actual false})))
+
+"  
+_#

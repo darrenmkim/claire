@@ -56,3 +56,5 @@
       (combine deal 0))))
 
 (def myprojs (make-projs-for-deal b/mydeal))
+
+
