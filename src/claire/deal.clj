@@ -6,15 +6,6 @@
    [claire.domain :as b]))
 
 
-(def ttt (s/conform b/stances :pay))
-(def mymonth
-  (if (s/valid? b/stances :pay)
-    (:memo (:pay b/stances))))
-
-(def myusd (s/conform b/currency :usd))
-
-
-
 ;; MOCKING
 (defn set-mock! []
   (let

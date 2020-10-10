@@ -1,6 +1,6 @@
 (ns claire.core
   (:require
-   [claire.center.serve :as serve]))
+   [claire.serve :as serve]))
 
 (defn -main []
   (serve/run))
